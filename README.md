@@ -1,4 +1,4 @@
-<img src="https://capsule-render.vercel.app/api?type=waving&color=7FFFD4&height=100&section=header" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=FF914D&height=100&section=header" />
 
 # 2023학년도 2학기 캡스톤디자인 프론트엔드
 
@@ -43,7 +43,7 @@ $ yarn start
 <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=VisualStudioCode&logoColor=white">
 <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white">
 <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white">
-
+<img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
 
 ## Config
 
