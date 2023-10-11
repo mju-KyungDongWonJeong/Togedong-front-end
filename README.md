@@ -28,7 +28,7 @@
 ## Installation
 
 ```
-$ git clone https://github.com/wwweric12/bookchat-front-end.git
+$ git clone https://github.com/mju-KyungDongWonJeong/Togedong-front-end.git
 $ cd (파일명)
 $ yarn install
 $ yarn start
