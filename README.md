@@ -100,4 +100,4 @@ $ yarn start
 | **docs**                |       <center> README.md 작성, 주석 작성 </center>        |
 | **chore**               |               <center> 기타 작업 </center>                |
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=7FFFD4&height=100&section=footer" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=FF914D&height=100&section=footer" />
