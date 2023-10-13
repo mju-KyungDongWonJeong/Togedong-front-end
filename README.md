@@ -1,103 +1,46 @@
-<img src="https://capsule-render.vercel.app/api?type=waving&color=FF914D&height=100&section=header" />
+# Getting Started with Create React App
 
-# 2023학년도 2학기 캡스톤디자인 프론트엔드
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-<br>
+## Available Scripts
 
-# Togedong 💪
+In the project directory, you can run:
 
-<br>
+### `yarn start`
 
-# 개발팀 소개
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-|               **경규혁**               |                 **김동영**                 |
-| :------------------------------------: | :----------------------------------------: |
-| [@gyuhyuk](https://github.com/gyuhyuk) | [@wwweric12](https://github.com/wwweric12) |
-|                  Web                   |                    Web                     |
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-<br>
+### `yarn test`
 
-# 프로젝트 소개
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-## 현대인들의 운동 부족을 해결하기 위한 실시간 운동 경쟁 웹 게임 서비스
+### `yarn build`
 
-<br>
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-# 시작 가이드
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-## Installation
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-```
-$ git clone https://github.com/mju-KyungDongWonJeong/Togedong-front-end.git
-$ cd (파일명)
-$ yarn install
-$ yarn start
-```
+### `yarn eject`
 
-<br>
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-# Stacks 📖
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-## Environments
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-<img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=VisualStudioCode&logoColor=white">
-<img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white">
-<img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white">
-<img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
-<img src="https://img.shields.io/badge/Canva-%2300C4CC.svg?&style=for-the-badge&logo=Canva&logoColor=white">
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Config
+## Learn More
 
-<img src="https://img.shields.io/badge/yarn-2C8EBB?style=for-the-badge&logo=yarn&logoColor=white">
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-## Development
-
-<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white">
-<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white">
-<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white">
-<img src="https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">
-
-## Communication
-
-<img src="https://img.shields.io/badge/googlemeet-00897B?style=for-the-badge&logo=googlemeet&logoColor=white">
-<img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
-<img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
-
-<hr/>
-<br>
-
-# 화면 구성 🖥️
-
-<hr/>
-
-<br>
-
-# 주요 기능 🗺️
-
-<hr/>
-
-<br>
-
-# 🤝 Branch Naming Convention
-
-| <center>머릿말</center> |                 <center>설명</center>                 |
-| :---------------------- | :---------------------------------------------------: |
-| **master**              |           <center> 서비스 브랜치 </center>            |
-| **develop**             |         <center> 배포 전 작업 기준 </center>          |
-| **feature**             |           <center> 기능 단위 구현 </center>           |
-| **hotfix**              | <center> 서비스 중 긴급 수정 건에 대한 처리 </center> |
-
-<br>
-
-# 🤝 Commit Convention
-
-| <center>머릿말</center> |                   <center>설명</center>                   |
-| :---------------------- | :-------------------------------------------------------: |
-| **feat**                |            <center> 기능 구현, 추가 </center>             |
-| **setting**             |         <center> 패키지 설치, 개발 설정 </center>         |
-| **refactor**            |             <center> 코드 리팩터링 </center>              |
-| **fix**                 | <center> 버그 수정, 예외 케이스 대응, 기능 개선 </center> |
-| **docs**                |       <center> README.md 작성, 주석 작성 </center>        |
-| **chore**               |               <center> 기타 작업 </center>                |
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=7FFFD4&height=100&section=footer" />
+To learn React, check out the [React documentation](https://reactjs.org/).
