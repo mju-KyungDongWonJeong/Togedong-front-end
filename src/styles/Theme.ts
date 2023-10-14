@@ -7,6 +7,7 @@ const colors = {
   GREEN: '#00BF08',
   GRAY1: '#6F6F6F',
   GRAY2: '#F3F5F9',
+  BLACK: '#000',
 };
 
 export type Colors = typeof colors;
