@@ -8,8 +8,12 @@ interface LargeButtonInterface {
   text: string;
 }
 
+const handleClick = () => {
+  console.log('Click');
+};
+
 const LargeButton: React.FC<LargeButtonInterface> = ({ text }) => {
-  return <Button>{text}</Button>;
+  return <Button onClick={handleClick}>{text}</Button>;
 };
 
 export default LargeButton;
