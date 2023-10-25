@@ -3,11 +3,15 @@ import { theme } from './styles/Theme';
 import './App.css';
 import CreateRoom from './assets/modal/CreateRoom';
 
+import ChallengeApply from './assets/modal/ChallengeApply';
+import SmallButton from './assets/component/SmallButton';
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Divv>
         <CreateRoom />
+        {/* <ChallengeApply /> */}
+        <SmallButton text="방 생성하기" />
       </Divv>
     </ThemeProvider>
   );
