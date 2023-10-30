@@ -1,14 +1,13 @@
 import styled, { ThemeProvider } from 'styled-components';
 import { theme } from './styles/Theme';
 import './App.css';
-import ChallengeApply from './assets/modal/ChallengeApply';
-import SmallButton from './assets/component/SmallButton';
+import Signup from './assets/pages/Signup/Signup';
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Divv>
-        {/* <ChallengeApply /> */}
-        <SmallButton text="방 생성하기" />
+        <Signup />
       </Divv>
     </ThemeProvider>
   );
