@@ -9,7 +9,7 @@ interface LargeButtonInterface {
 }
 
 const handleClick = () => {
-  console.log('Click');
+  // console.log('Click');
 };
 
 const LargeButton: React.FC<LargeButtonInterface> = ({ text }) => {

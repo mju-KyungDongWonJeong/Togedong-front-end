@@ -1,22 +1,36 @@
 import styled from 'styled-components';
+import { UseFormRegister } from 'react-hook-form';
+
+type FieldValues = {
+  id: string;
+  password: string;
+  userName: string;
+};
 
 interface InputProps {
   src: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   placeholder: string;
   type?: string;
-  inputId?: string;
+  inputId: 'id' | 'password' | 'userName';
+  register: UseFormRegister<FieldValues>;
 }
 
-const Input: React.FC<InputProps> = ({ src, placeholder, type, inputId }) => {
+const Input: React.FC<InputProps> = ({
+  src,
+  placeholder,
+  register,
+  type,
+  inputId,
+}) => {
   return (
     <InputContainer>
       <InputImage as={src} />
       <InputContent
         placeholder={placeholder}
         type={type}
-        // {...register(inputId)}
+        {...register(inputId)}
         id={inputId}
-      ></InputContent>
+      />
     </InputContainer>
   );
 };
