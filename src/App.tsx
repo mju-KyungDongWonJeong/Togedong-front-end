@@ -2,7 +2,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { theme } from './styles/Theme';
 import './App.css';
 import Signup from './assets/pages/Signup/Signup';
-
+import SmallButton from './assets/component/SmallButton';
 function App() {
   return (
     <ThemeProvider theme={theme}>
