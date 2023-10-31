@@ -1,21 +1,20 @@
 import styled from 'styled-components';
 import { UseFormRegister } from 'react-hook-form';
 
-type FieldValues = {
+interface FieldValues {
   id: string;
   password: string;
-  userName: string;
-};
+}
 
 interface InputProps {
   src: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   placeholder: string;
   type?: string;
-  inputId: 'id' | 'password' | 'userName';
+  inputId: 'id' | 'password';
   register: UseFormRegister<FieldValues>;
 }
 
-const Input: React.FC<InputProps> = ({
+const LoginInput: React.FC<InputProps> = ({
   src,
   placeholder,
   register,
@@ -35,7 +34,7 @@ const Input: React.FC<InputProps> = ({
   );
 };
 
-export default Input;
+export default LoginInput;
 
 const InputContainer = styled.div`
   width: 400px;
