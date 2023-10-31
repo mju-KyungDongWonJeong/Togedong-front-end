@@ -1,6 +1,5 @@
 import styled, { ThemeProvider } from 'styled-components';
 import { theme } from './styles/Theme';
-import PushUpGameGuide from './assets/modal/PushUpGameGuide';
 import './App.css';
 
 function App() {
