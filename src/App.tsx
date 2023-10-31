@@ -3,7 +3,11 @@ import { theme } from './styles/Theme';
 import './App.css';
 
 function App() {
-  return <ThemeProvider theme={theme}></ThemeProvider>;
+  return (
+    <ThemeProvider theme={theme}>
+      <Divv></Divv>
+    </ThemeProvider>
+  );
 }
 
 export default App;
