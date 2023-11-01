@@ -3,7 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ReactComponent as Logo } from '../../images/logo_white.svg';
 import { ReactComponent as User } from '../../images/user.svg';
 import { ReactComponent as Lock } from '../../images/lock.svg';
-import Input from '../../component/LoginInput';
+import Input from '../../component/Input';
 import LargeButton from '../../component/LargeButton';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { validation } from './Validation';
@@ -19,7 +19,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormValues>({
     resolver: yupResolver(validation),
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
@@ -43,21 +43,23 @@ const Login = () => {
           <InputContainer onSubmit={handleSubmit(onSubmit)}>
             <InputBox>
               <Input
-                src={User}
+                imgSrc={User}
                 placeholder="아이디를 입력해주세요"
                 type="id"
                 register={register}
-                inputId="id"
+                required
+                name="id"
               />
               {errors.id && <LoginError>{errors.id.message}</LoginError>}
             </InputBox>
             <InputBox>
               <Input
                 register={register}
-                src={Lock}
+                imgSrc={Lock}
                 placeholder="비밀번호를 입력해주세요"
                 type="password"
-                inputId="password"
+                required
+                name="password"
               />
               {errors.password && (
                 <LoginError>{errors.password.message}</LoginError>

@@ -4,12 +4,12 @@ import { ReactComponent as Logo } from '../../images/logo_white.svg';
 import { ReactComponent as Nickname } from '../../images/nickname.svg';
 import { ReactComponent as User } from '../../images/user.svg';
 import { ReactComponent as Lock } from '../../images/lock.svg';
-import Input from '../../component/SignupInput';
+import Input from '../../component/Input';
 import LargeButton from '../../component/LargeButton';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { validation } from './Validation';
 
-type FormValues = {
+type SignupInputs = {
   id: string;
   password: string;
   userName: string;
@@ -26,7 +26,7 @@ const Signup = () => {
     reValidateMode: 'onSubmit',
   });
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const onSubmit: SubmitHandler<SignupInputs> = (data) => {
     console.log(data);
   };
 
@@ -43,12 +43,13 @@ const Signup = () => {
           </SignupHeader>
           <InputContainer onSubmit={handleSubmit(onSubmit)}>
             <InputBox>
-              <Input
+              <Input<SignupInputs>
                 register={register}
-                src={Nickname}
+                imgSrc={Nickname}
                 placeholder="닉네임을 입력해주세요"
                 type="text"
-                inputId="userName"
+                name="userName"
+                required
               />
               {errors.userName && (
                 <SignupError>{errors.userName.message}</SignupError>
@@ -56,21 +57,23 @@ const Signup = () => {
             </InputBox>
             <InputBox>
               <Input
-                src={User}
+                imgSrc={User}
                 placeholder="아이디를 입력해주세요"
                 type="id"
                 register={register}
-                inputId="id"
+                name="id"
+                required
               />
               {errors.id && <SignupError>{errors.id.message}</SignupError>}
             </InputBox>
             <InputBox>
               <Input
                 register={register}
-                src={Lock}
+                imgSrc={Lock}
                 placeholder="비밀번호를 입력해주세요"
                 type="password"
-                inputId="password"
+                name="password"
+                required
               />
               {errors.password && (
                 <SignupError>{errors.password.message}</SignupError>
