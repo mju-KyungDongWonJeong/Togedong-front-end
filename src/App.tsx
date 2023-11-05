@@ -5,7 +5,8 @@ import Login from './assets/pages/Login/Login';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Signup from './assets/pages/Signup/Signup';
 import SideBar from './assets/component/SideBar';
-
+import DashboardBox from './assets/component/DashboardBox';
+import attendance from './assets/images/attendance.svg';
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -13,7 +14,17 @@ function App() {
         <Frame>
           <Routes>
             <Route element={<SideBar />}>
-              <Route path="/dashboard" />
+              <Route
+                path="/dashboard"
+                element={
+                  <DashboardBox
+                    title="출석일수"
+                    img={attendance}
+                    content="26"
+                    desc="총 30일"
+                  />
+                }
+              />
               <Route path="/game" />
               <Route path="/setting" />
             </Route>
