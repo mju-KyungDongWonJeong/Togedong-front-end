@@ -1,14 +1,15 @@
 import styled from 'styled-components';
 
-interface SideBar {
-  content: string;
-  src: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+interface SideBarProps {
+  content: 'Dashboard' | 'Game' | 'Setting';
+  src: string;
+  state: boolean;
 }
 
-const SideBarComponent = (sidebar: SideBar) => {
+const SideBarComponent = (sidebar: SideBarProps) => {
   return (
-    <SideBarContainer>
-      <SideBarImage as={sidebar.src} />
+    <SideBarContainer state={sidebar.state}>
+      <SideBarImage src={sidebar.src} />
       <SideBarContent>{sidebar.content}</SideBarContent>
     </SideBarContainer>
   );
@@ -16,13 +17,14 @@ const SideBarComponent = (sidebar: SideBar) => {
 
 export default SideBarComponent;
 
-const SideBarContainer = styled.div`
+const SideBarContainer = styled.div<{ state: boolean }>`
   width: 260px;
   height: 55px;
   display: flex;
   align-items: center;
   padding: 13px;
   border-top: 1px solid ${({ theme }) => theme.colors.GRAY1};
+  filter: ${(props) => (props.state ? 'none' : 'invert(50%)')};
 `;
 
 const SideBarImage = styled.img`

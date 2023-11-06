@@ -1,70 +1,56 @@
 import styled from 'styled-components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ReactComponent as Logo } from '../../images/logo_white.svg';
-import { ReactComponent as Nickname } from '../../images/nickname.svg';
 import { ReactComponent as User } from '../../images/user.svg';
 import { ReactComponent as Lock } from '../../images/lock.svg';
 import Input from '../../component/Input';
 import LargeButton from '../../component/LargeButton';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { validation } from './Validation';
+import { Link } from 'react-router-dom';
 
-type SignupInputs = {
+type FormValues = {
   id: string;
   password: string;
-  userName: string;
 };
 
-const Signup = () => {
+const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormValues>({
     resolver: yupResolver(validation),
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
   });
 
-  const onSubmit: SubmitHandler<SignupInputs> = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data);
   };
 
   return (
     <Background>
-      <SignupContainer>
+      <LoginContainer>
         <LogoContainer>
           <Logo />
         </LogoContainer>
         <ContentConatiner>
-          <SignupHeader>
-            <SignupTitle>회원가입</SignupTitle>
-            <SignupIntro>저희의 새로운 회원이 되어주세요!</SignupIntro>
-          </SignupHeader>
+          <LoginHeader>
+            <LoginTitle>로그인</LoginTitle>
+            <LoginIntro>저희와 함께 운동해요!</LoginIntro>
+          </LoginHeader>
           <InputContainer onSubmit={handleSubmit(onSubmit)}>
-            <InputBox>
-              <Input<SignupInputs>
-                register={register}
-                imgSrc={Nickname}
-                placeholder="닉네임을 입력해주세요"
-                type="text"
-                name="userName"
-                required
-              />
-              {errors.userName && (
-                <SignupError>{errors.userName.message}</SignupError>
-              )}
-            </InputBox>
             <InputBox>
               <Input
                 imgSrc={User}
                 placeholder="아이디를 입력해주세요"
                 type="id"
                 register={register}
-                name="id"
                 required
+                name="id"
               />
-              {errors.id && <SignupError>{errors.id.message}</SignupError>}
+              {errors.id && <LoginError>{errors.id.message}</LoginError>}
             </InputBox>
             <InputBox>
               <Input
@@ -72,22 +58,26 @@ const Signup = () => {
                 imgSrc={Lock}
                 placeholder="비밀번호를 입력해주세요"
                 type="password"
-                name="password"
                 required
+                name="password"
               />
               {errors.password && (
-                <SignupError>{errors.password.message}</SignupError>
+                <LoginError>{errors.password.message}</LoginError>
               )}
             </InputBox>
-            <LargeButton text="회원가입" />
+            <LinkContainer>
+              아직 회원이 아니신가요?
+              <LinkSignup to="/signup">회원가입 하기</LinkSignup>
+            </LinkContainer>
+            <LargeButton text="로그인" />
           </InputContainer>
         </ContentConatiner>
-      </SignupContainer>
+      </LoginContainer>
     </Background>
   );
 };
 
-export default Signup;
+export default Login;
 
 const Background = styled.div`
   width: 100%;
@@ -95,7 +85,7 @@ const Background = styled.div`
   padding: 50px 220px;
 `;
 
-const SignupContainer = styled.div`
+const LoginContainer = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 20px;
@@ -121,17 +111,17 @@ const ContentConatiner = styled.div`
   padding: 70px 95px;
 `;
 
-const SignupHeader = styled.div`
+const LoginHeader = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 100px;
 `;
-const SignupTitle = styled.div`
+const LoginTitle = styled.div`
   font-size: 36px;
   font-weight: 800;
   margin-bottom: 10px;
 `;
-const SignupIntro = styled.div`
+const LoginIntro = styled.div`
   color: ${({ theme }) => theme.colors.GRAY1};
   font-size: 15px;
   font-weight: 500;
@@ -150,7 +140,20 @@ const InputContainer = styled.form`
 const InputBox = styled.div`
   margin-bottom: 20px;
 `;
-const SignupError = styled.div`
+
+const LinkContainer = styled.p`
+  display: flex;
+  width: 100%;
+  justify-content: end;
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.GRAY1};
+`;
+
+const LinkSignup = styled(Link)`
+  color: ${({ theme }) => theme.colors.ORANGE1};
+`;
+
+const LoginError = styled.div`
   display: flex;
   width: 100%;
   align-items: baseline;

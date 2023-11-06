@@ -1,35 +1,31 @@
+import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
-import { UseFormRegister } from 'react-hook-form';
+import { FieldValues, UseFormRegister, Path } from 'react-hook-form';
 
-type FieldValues = {
-  id: string;
-  password: string;
-  userName: string;
-};
-
-interface InputProps {
-  src: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  placeholder: string;
+interface InputProps<T extends FieldValues> {
+  imgSrc: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   type?: string;
-  inputId: 'id' | 'password' | 'userName';
-  register: UseFormRegister<FieldValues>;
+  name: Path<T>;
+  register: UseFormRegister<T>;
+  required: boolean;
 }
 
-const Input: React.FC<InputProps> = ({
-  src,
-  placeholder,
+const Input = <T extends FieldValues>({
+  imgSrc,
   register,
+  placeholder,
   type,
-  inputId,
-}) => {
+  name,
+  required,
+}: InputProps<T> & InputHTMLAttributes<HTMLInputElement>) => {
   return (
     <InputContainer>
-      <InputImage as={src} />
+      <InputImage as={imgSrc} />
       <InputContent
         placeholder={placeholder}
         type={type}
-        {...register(inputId)}
-        id={inputId}
+        {...register(name, { required })}
+        id={name}
       />
     </InputContainer>
   );
