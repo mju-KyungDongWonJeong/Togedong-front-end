@@ -108,9 +108,10 @@ const NextButton = styled.button`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.ORANGE2};
+  background-color: ${({ theme }) => theme.colors.WHITE};
   position: absolute;
   left: 650px;
+  box-shadow: 1px 1px 1px 1px Gray;
 `;
 
 const PrevButton = styled.button`
@@ -118,9 +119,10 @@ const PrevButton = styled.button`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.ORANGE2};
+  background-color: ${({ theme }) => theme.colors.WHITE};
   position: absolute;
   right: 650px;
+  box-shadow: 1px 1px 1px 1px Gray;
 `;
 
 const ExitButton = styled.img`
