@@ -23,7 +23,7 @@ const DashboardBox = ({ title, img, content, desc }: DashboardBoxProps) => {
 export default DashboardBox;
 
 const DashboardBoxContainer = styled.div`
-  width: 200px;
+  width: 250px;
   height: 150px;
   border-radius: 10px;
   background: ${({ theme }) => theme.colors.WHITE};
@@ -49,7 +49,7 @@ const BoxImg = styled.img``;
 
 const BoxContent = styled.div`
   font-size: 30px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 const BoxDesc = styled.div`
