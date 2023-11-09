@@ -5,6 +5,10 @@ import Login from './assets/pages/Login/Login';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Signup from './assets/pages/Signup/Signup';
 import SideBar from './assets/component/SideBar';
+import PushUpGameGuide from './assets/modal/PushUpGameGuide';
+import SquatGameGuide from './assets/modal/SquatGameGuide';
+import DashboardBox from './assets/component/DashboardBox';
+import attendance from './assets/images/attendance.svg';
 import Dashboard from './assets/pages/Dashboard';
 
 function App() {
@@ -20,6 +24,8 @@ function App() {
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/pushupguide" element={<PushUpGameGuide />} />
+            <Route path="/squatguide" element={<SquatGameGuide />} />
           </Routes>
         </Frame>
       </Router>
