@@ -6,6 +6,7 @@ import Game from '../images/game.svg';
 import Setting from '../images/setting.svg';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import MainHeader from './MainHeader';
 
 interface SideBar {
   content: 'Dashboard' | 'Game' | 'Setting';
@@ -70,9 +71,10 @@ const SideBar = () => {
           </button>
         ))}
       </SideBarContainer>
-      <div>
+      <OutletContiner>
+        <MainHeader />
         <Outlet />
-      </div>
+      </OutletContiner>
     </>
   );
 };
@@ -89,4 +91,10 @@ const SideBarContainer = styled.div`
 const SideBarHeader = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+const OutletContiner = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `;

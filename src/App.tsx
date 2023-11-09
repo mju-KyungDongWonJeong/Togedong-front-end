@@ -9,6 +9,8 @@ import PushUpGameGuide from './assets/modal/PushUpGameGuide';
 import SquatGameGuide from './assets/modal/SquatGameGuide';
 import DashboardBox from './assets/component/DashboardBox';
 import attendance from './assets/images/attendance.svg';
+import Dashboard from './assets/pages/Dashboard';
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -16,17 +18,7 @@ function App() {
         <Frame>
           <Routes>
             <Route element={<SideBar />}>
-              <Route
-                path="/dashboard"
-                element={
-                  <DashboardBox
-                    title="출석일수"
-                    img={attendance}
-                    content="26"
-                    desc="총 30일"
-                  />
-                }
-              />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/game" />
               <Route path="/setting" />
             </Route>

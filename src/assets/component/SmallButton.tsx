@@ -1,20 +1,13 @@
 import styled from 'styled-components';
 
-/**
- * 사용하실 때 <SmallButton text="게임하기!" /> 형식으로 사용하시면 됩니다.
- */
-
 interface SmallButtonInterface {
   text: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const handleClick = () => {
-  console.log('click');
-};
-
-const SmallButton: React.FC<SmallButtonInterface> = ({ text }) => {
+const SmallButton = ({ text, onClick }: SmallButtonInterface) => {
   return (
-    <Button text={text} onClick={handleClick}>
+    <Button text={text} onClick={onClick}>
       {text}
     </Button>
   );
