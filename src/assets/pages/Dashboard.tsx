@@ -4,6 +4,8 @@ import badge from '../images/badge.svg';
 import record from '../images/record.svg';
 import SmallButton from '../component/SmallButton';
 import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { sidebrState } from '../store/atoms/Sidebar/state';
 
 const Dashboard = () => {
   const [contentView, setContentView] = useState({
@@ -16,7 +18,7 @@ const Dashboard = () => {
   });
 
   const [status, setStatus] = useState(false);
-
+  const navbar = useRecoilValue(sidebrState);
   const dashboardBox = [
     {
       title: '보유 뱃지',
@@ -60,8 +62,6 @@ const Dashboard = () => {
     setStatus(true);
   };
 
-  const handleExercise = () => {};
-
   return (
     <DashboardContainer>
       <DashboardHeader>
@@ -92,12 +92,14 @@ const Dashboard = () => {
         {contentView.challenge && (
           <ContentContainer>
             <ContentHeader>
-              <ChallengeTitle>첼린지</ChallengeTitle>
+              <ChallengeTitle navbar={navbar}>첼린지</ChallengeTitle>
               <ChallengeCount>참여자 수</ChallengeCount>
               <ChallengeStatus>달성현황</ChallengeStatus>
             </ContentHeader>
             <ContentBox>
-              <ChallengeTitle>팔굽 10일동안 100개씩</ChallengeTitle>
+              <ChallengeTitle navbar={navbar}>
+                팔굽 10일동안 100개씩
+              </ChallengeTitle>
               <ChallengeCount>124</ChallengeCount>
               <ChallengeStatus>15%</ChallengeStatus>
               {status ? (
@@ -152,7 +154,7 @@ export default Dashboard;
 const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  position: relative;
+  align-items: center;
   width: 100%;
 `;
 
@@ -175,11 +177,12 @@ const HeaderContent = styled.div`
   font-size: 30px;
   font-weight: 500;
   margin-bottom: 40px;
+  max-width: 1165px;
 `;
 
 const DashboardBoxContainer = styled.div`
   display: flex;
-  gap: 150px;
+  justify-content: space-between;
   margin-top: -70px;
   margin-bottom: 40px;
 `;
@@ -211,8 +214,8 @@ const ContentHeader = styled.div`
   font-weight: 500;
 `;
 
-const ChallengeTitle = styled.div`
-  width: 350px;
+const ChallengeTitle = styled.div<{ navbar: boolean }>`
+  width: ${(props) => (props.navbar ? '350px' : '500px')};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -283,6 +286,7 @@ const SelectExercise = styled.button<{ state: boolean }>`
 
 const Rank = styled.div`
   width: 250px;
+  flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -290,6 +294,7 @@ const Rank = styled.div`
 
 const RankName = styled.div`
   width: 400px;
+  flex-grow: 2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -297,6 +302,7 @@ const RankName = styled.div`
 
 const RankCount = styled.div`
   width: 400px;
+  flex-grow: 2;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -4,8 +4,8 @@ import './App.css';
 import Login from './assets/pages/Login/Login';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Signup from './assets/pages/Signup/Signup';
-import SideBar from './assets/component/SideBar';
 import Dashboard from './assets/pages/Dashboard';
+import MainHeader from './assets/component/MainHeader';
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <Router>
         <Frame>
           <Routes>
-            <Route element={<SideBar />}>
+            <Route element={<MainHeader />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/game" />
               <Route path="/setting" />
