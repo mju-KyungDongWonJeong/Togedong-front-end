@@ -2,15 +2,16 @@ import styled from 'styled-components';
 import SearchInput from './SearchInput';
 import logout from '../images/logout.svg';
 import sidebar from '../images/sidebar.svg';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import SideBar from './SideBar';
 import { useRecoilState } from 'recoil';
 import { sidebrState } from '../store/atoms/Sidebar/state';
 
 const MainHeader = () => {
+  const navigate = useNavigate();
   const [navbar, setNavbar] = useRecoilState(sidebrState);
   const handleLogout = () => {
-    console.log('Logout');
+    navigate('/login');
   };
 
   const handleSideBar = () => {

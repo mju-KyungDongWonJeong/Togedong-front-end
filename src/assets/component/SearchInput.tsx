@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const SearchInput = () => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState<string>('');
   const handleSubmit = () => {
-    console.log(search);
+    navigate(`/dashboard/${search}`);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
