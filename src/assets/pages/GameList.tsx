@@ -5,6 +5,7 @@ import { ReactComponent as Squat } from '../images/squat.svg';
 import { useState } from 'react';
 import SmallButton from '../component/SmallButton';
 import CreateRoom from '../modal/CreateRoom';
+import SearchInput from '../component/SearchInput';
 
 type ExerciseState = {
   PUSHUP: boolean;
@@ -17,9 +18,16 @@ const GameList = () => {
     SQUAT: false,
   });
   const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState<string>('');
 
   const handleCreateRoom = () => {
     setIsOpen(true);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(search);
+    setSearch('');
   };
 
   return (
@@ -53,7 +61,16 @@ const GameList = () => {
             <SmallButton text="생성하기" onClick={handleCreateRoom} />
           </CreateRoomContainer>
         </GameListHeader>
-        <GameListBackground></GameListBackground>
+        <GameListBackground>
+          <InputContainer>
+            <SearchInput
+              onSubmit={handleSubmit}
+              placeholder="방을 검색 하세요!"
+              search={search}
+              setSearch={setSearch}
+            />
+          </InputContainer>
+        </GameListBackground>
       </GameListContainer>
     </>
   );
@@ -91,4 +108,11 @@ const GameListBackground = styled.div`
   width: 100%;
   background-color: #f3f5f9;
   min-height: 500px;
+`;
+
+const InputContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  padding: 10px 60px;
 `;

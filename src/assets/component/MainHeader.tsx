@@ -5,11 +5,14 @@ import sidebar from '../images/sidebar.svg';
 import { Outlet, useNavigate } from 'react-router-dom';
 import SideBar from './SideBar';
 import { useRecoilState } from 'recoil';
-import { sidebrState } from '../store/atoms/Sidebar/state';
+import { sidebarState } from '../store/atoms/Sidebar/state';
+import { useState } from 'react';
 
 const MainHeader = () => {
   const navigate = useNavigate();
-  const [navbar, setNavbar] = useRecoilState(sidebrState);
+  const [search, setSearch] = useState<string>('');
+  const [navbar, setNavbar] = useRecoilState(sidebarState);
+
   const handleLogout = () => {
     navigate('/login');
   };
@@ -18,6 +21,11 @@ const MainHeader = () => {
     setNavbar((props) => !props);
     console.log(navbar);
   };
+
+  const handleSubmit = () => {
+    navigate(`/dashboard/${search}`);
+  };
+
   return (
     <>
       {navbar && <SideBar />}
@@ -27,7 +35,12 @@ const MainHeader = () => {
             <button onClick={handleSideBar}>
               <SidebarImage src={sidebar} alt="사이드바 이미지" />
             </button>
-            <SearchInput />
+            <SearchInput
+              onSubmit={handleSubmit}
+              placeholder="친구를 검색하세요!"
+              search={search}
+              setSearch={setSearch}
+            />
           </LeftContainer>
           <ExitImage
             src={logout}

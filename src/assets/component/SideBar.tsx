@@ -36,7 +36,7 @@ const SideBar = () => {
     },
     {
       content: 'Game',
-      path: '/game',
+      path: '/gamelist',
       src: Game,
       state: { Dashboard: false, Game: true, Setting: false },
     },
