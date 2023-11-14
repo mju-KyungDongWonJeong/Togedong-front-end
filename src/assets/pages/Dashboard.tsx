@@ -5,7 +5,7 @@ import record from '../images/record.svg';
 import SmallButton from '../component/SmallButton';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { sidebrState } from '../store/atoms/Sidebar/state';
+import { sidebarState } from '../store/atoms/Sidebar/state';
 
 const Dashboard = () => {
   const [contentView, setContentView] = useState({
@@ -18,7 +18,7 @@ const Dashboard = () => {
   });
 
   const [status, setStatus] = useState(false);
-  const navbar = useRecoilValue(sidebrState);
+  const navbar = useRecoilValue(sidebarState);
   const dashboardBox = [
     {
       title: '보유 뱃지',
