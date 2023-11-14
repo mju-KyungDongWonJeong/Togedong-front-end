@@ -4,9 +4,11 @@ import './App.css';
 import Login from './assets/pages/Login/Login';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Signup from './assets/pages/Signup/Signup';
-import SideBar from './assets/component/SideBar';
+import PushUpGameGuide from './assets/modal/PushUpGameGuide';
+import SquatGameGuide from './assets/modal/SquatGameGuide';
 import Dashboard from './assets/pages/Dashboard';
 import GameList from './assets/pages/GameList';
+import MainHeader from './assets/component/MainHeader';
 
 function App() {
   return (
@@ -14,13 +16,15 @@ function App() {
       <Router>
         <Frame>
           <Routes>
-            <Route element={<SideBar />}>
+            <Route element={<MainHeader />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/gamelist" element={<GameList />} />
               <Route path="/setting" />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/pushupguide" element={<PushUpGameGuide />} />
+            <Route path="/squatguide" element={<SquatGameGuide />} />
           </Routes>
         </Frame>
       </Router>

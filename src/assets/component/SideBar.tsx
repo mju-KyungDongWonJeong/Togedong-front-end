@@ -4,17 +4,16 @@ import { ReactComponent as SideBarLogo } from '../images/logo_orange.svg';
 import DashBoard from '../images/dashboard.svg';
 import Game from '../images/game.svg';
 import Setting from '../images/setting.svg';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import MainHeader from './MainHeader';
 
 interface SideBar {
   content: 'Dashboard' | 'Game' | 'Setting';
   src: string;
-  state: SideBarProps;
+  state: SideBarState;
   path: string;
 }
-interface SideBarProps {
+interface SideBarState {
   Dashboard: boolean;
   Game: boolean;
   Setting: boolean;
@@ -71,10 +70,6 @@ const SideBar = () => {
           </button>
         ))}
       </SideBarContainer>
-      <OutletContiner>
-        <MainHeader />
-        <Outlet />
-      </OutletContiner>
     </>
   );
 };
@@ -91,10 +86,4 @@ const SideBarContainer = styled.div`
 const SideBarHeader = styled.div`
   display: flex;
   justify-content: center;
-`;
-
-const OutletContiner = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
 `;
