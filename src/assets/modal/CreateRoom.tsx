@@ -49,6 +49,7 @@ const CreateRoom = () => {
           onClick={() => setSelectExercise({ PUSHUP: true, SQUAT: false })}
         >
           <ExerciseImg
+            isModal={true}
             src={PushUp}
             title="푸쉬업"
             check={selectExercise.PUSHUP}
@@ -58,6 +59,7 @@ const CreateRoom = () => {
           onClick={() => setSelectExercise({ PUSHUP: false, SQUAT: true })}
         >
           <ExerciseImg
+            isModal={true}
             src={Squat}
             title="스쿼트"
             check={selectExercise.SQUAT}

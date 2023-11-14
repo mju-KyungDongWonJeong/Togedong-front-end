@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Signup from './assets/pages/Signup/Signup';
 import SideBar from './assets/component/SideBar';
 import Dashboard from './assets/pages/Dashboard';
+import GameList from './assets/pages/GameList';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
           <Routes>
             <Route element={<SideBar />}>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/game" />
+              <Route path="/gamelist" element={<GameList />} />
               <Route path="/setting" />
             </Route>
             <Route path="/login" element={<Login />} />
