@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { ReactComponent as PushUp } from '../images/push-up.svg';
 import { ReactComponent as Squat } from '../images/squat.svg';
-import { ReactComponent as Cancle } from '../images/cancle.svg';
+import { ReactComponent as Cancle } from '../images/cancel.svg';
 import ExerciseImg from '../component/ExerciseImg';
 import SmallButton from '../component/SmallButton';
 import { useState } from 'react';
@@ -15,7 +15,11 @@ interface CreateRoom {
   onClick(): void;
 }
 
-const CreateRoom = () => {
+interface CreateRoomProps {
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
   const [selectExercise, setSelectExercise] = useState<ExerciseState>({
     PUSHUP: true,
     SQUAT: false,
@@ -25,7 +29,9 @@ const CreateRoom = () => {
   const [password, setPassword] = useState<string>();
   const [countPerson, setCountPerson] = useState<string>('1');
   const handleCreate = () => {};
-  //   const handleCancle = () => onClick();
+  const handleCancle = () => {
+    setIsOpen(false);
+  };
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
@@ -43,82 +49,100 @@ const CreateRoom = () => {
   };
 
   return (
-    <CreateRoomContainer>
-      <CreateRoomHeader>
-        <button
-          onClick={() => setSelectExercise({ PUSHUP: true, SQUAT: false })}
-        >
-          <ExerciseImg
-            isModal={true}
-            src={PushUp}
-            title="푸쉬업"
-            check={selectExercise.PUSHUP}
-          />
-        </button>
-        <button
-          onClick={() => setSelectExercise({ PUSHUP: false, SQUAT: true })}
-        >
-          <ExerciseImg
-            isModal={true}
-            src={Squat}
-            title="스쿼트"
-            check={selectExercise.SQUAT}
-          />
-        </button>
-      </CreateRoomHeader>
-      <ContentContainer>
-        <RoomTitleBox>
-          <RoomTitle>방 이름</RoomTitle>
-          <TitleInput onChange={handleTitle} value={title} />
-        </RoomTitleBox>
-        <RoomPasswordBox>
-          <PasswordNameBox>
-            <PasswordName>비밀번호</PasswordName>
-            <PasswordCheck type="checkbox" onClick={handlePasswordBox} />
-          </PasswordNameBox>
-          {passwordBox && (
-            <PasswordInput
-              type="password"
-              onChange={handlePassword}
-              value={password}
+    <>
+      <BackGround></BackGround>
+      <CreateRoomContainer>
+        <CreateRoomHeader>
+          <button
+            onClick={() => setSelectExercise({ PUSHUP: true, SQUAT: false })}
+          >
+            <ExerciseImg
+              isModal={true}
+              src={PushUp}
+              title="푸쉬업"
+              check={selectExercise.PUSHUP}
             />
-          )}
-        </RoomPasswordBox>
-        <CountContainer>
-          <CountTitle>인원수</CountTitle>
-          <CountSelect onChange={selectPerson}>
-            <option key="1" value="1">
-              1
-            </option>
-            <option key="2" value="2">
-              2
-            </option>
-            <option key="3" value="3">
-              3
-            </option>
-          </CountSelect>
-        </CountContainer>
-        <ButtonContainer>
-          <button onClick={handleCreate}>
-            <SmallButton text="만들기" />
           </button>
-        </ButtonContainer>
-      </ContentContainer>
-      <CancleButton>
-        <Cancle />
-      </CancleButton>
-    </CreateRoomContainer>
+          <button
+            onClick={() => setSelectExercise({ PUSHUP: false, SQUAT: true })}
+          >
+            <ExerciseImg
+              isModal={true}
+              src={Squat}
+              title="스쿼트"
+              check={selectExercise.SQUAT}
+            />
+          </button>
+        </CreateRoomHeader>
+        <ContentContainer>
+          <RoomTitleBox>
+            <RoomTitle>방 이름</RoomTitle>
+            <TitleInput onChange={handleTitle} value={title} />
+          </RoomTitleBox>
+          <RoomPasswordBox>
+            <PasswordNameBox>
+              <PasswordName>비밀번호</PasswordName>
+              <PasswordCheck type="checkbox" onClick={handlePasswordBox} />
+            </PasswordNameBox>
+            {passwordBox && (
+              <PasswordInput
+                type="password"
+                onChange={handlePassword}
+                value={password}
+              />
+            )}
+          </RoomPasswordBox>
+          <CountContainer>
+            <CountTitle>인원수</CountTitle>
+            <CountSelect onChange={selectPerson}>
+              <option key="1" value="1">
+                1
+              </option>
+              <option key="2" value="2">
+                2
+              </option>
+              <option key="3" value="3">
+                3
+              </option>
+            </CountSelect>
+          </CountContainer>
+          <ButtonContainer>
+            <button onClick={handleCreate}>
+              <SmallButton text="만들기" />
+            </button>
+          </ButtonContainer>
+        </ContentContainer>
+        <CancleButton onClick={handleCancle}>
+          <Cancle />
+        </CancleButton>
+      </CreateRoomContainer>
+    </>
   );
 };
 
 export default CreateRoom;
 
+const BackGround = styled.div`
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100vh;
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  left: 0;
+`;
+
 const CreateRoomContainer = styled.div`
   width: 600px;
   height: 500px;
   padding: 20px 100px;
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   border: 1px solid ${({ theme }) => theme.colors.BLACK};
+  z-index: 2;
+  background-color: ${({ theme }) => theme.colors.WHITE};
 `;
 
 const CreateRoomHeader = styled.div`
