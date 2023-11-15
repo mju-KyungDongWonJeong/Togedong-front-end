@@ -5,11 +5,11 @@ import sidebar from '../images/sidebar.svg';
 import { Outlet, useNavigate } from 'react-router-dom';
 import SideBar from './SideBar';
 import { useRecoilState } from 'recoil';
-import { sidebrState } from '../store/atoms/Sidebar/state';
+import { sidebarState } from '../store/atoms/Sidebar/state';
 
 const MainHeader = () => {
   const navigate = useNavigate();
-  const [navbar, setNavbar] = useRecoilState(sidebrState);
+  const [navbar, setNavbar] = useRecoilState(sidebarState);
   const handleLogout = () => {
     navigate('/login');
   };
