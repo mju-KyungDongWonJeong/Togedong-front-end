@@ -2,28 +2,42 @@ import styled from 'styled-components';
 import SearchInput from './SearchInput';
 import logout from '../images/logout.svg';
 import sidebar from '../images/sidebar.svg';
-
-const handleLogout = () => {
-  console.log('Logout');
-};
-
-const handleSideBar = () => {
-  console.log('clicked SideBar');
-};
+import { Outlet, useNavigate } from 'react-router-dom';
+import SideBar from './SideBar';
+import { useRecoilState } from 'recoil';
+import { sidebarState } from '../store/atoms/Sidebar/state';
 
 const MainHeader = () => {
+  const navigate = useNavigate();
+  const [navbar, setNavbar] = useRecoilState(sidebarState);
+  const handleLogout = () => {
+    navigate('/login');
+  };
+
+  const handleSideBar = () => {
+    setNavbar((props) => !props);
+    console.log(navbar);
+  };
   return (
-    <Header>
-      <LeftContainer>
-        <SidebarImage
-          src={sidebar}
-          alt="사이드바 이미지"
-          onClick={handleSideBar}
-        />
-        <SearchInput />
-      </LeftContainer>
-      <ExitImage src={logout} alt="로그아웃 이미지" onClick={handleLogout} />
-    </Header>
+    <>
+      {navbar && <SideBar />}
+      <OutletContiner>
+        <Header>
+          <LeftContainer>
+            <button onClick={handleSideBar}>
+              <SidebarImage src={sidebar} alt="사이드바 이미지" />
+            </button>
+            <SearchInput />
+          </LeftContainer>
+          <ExitImage
+            src={logout}
+            alt="로그아웃 이미지"
+            onClick={handleLogout}
+          />
+        </Header>
+        <Outlet />
+      </OutletContiner>
+    </>
   );
 };
 
@@ -61,4 +75,10 @@ const SidebarImage = styled.img`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const OutletContiner = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `;

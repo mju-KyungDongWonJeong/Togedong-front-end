@@ -4,29 +4,19 @@ import './App.css';
 import Login from './assets/pages/Login/Login';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Signup from './assets/pages/Signup/Signup';
-import SideBar from './assets/component/SideBar';
 import PushUpGameGuide from './assets/modal/PushUpGameGuide';
 import SquatGameGuide from './assets/modal/SquatGameGuide';
-import DashboardBox from './assets/component/DashboardBox';
-import attendance from './assets/images/attendance.svg';
+import Dashboard from './assets/pages/Dashboard';
+import MainHeader from './assets/component/MainHeader';
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <Frame>
           <Routes>
-            <Route element={<SideBar />}>
-              <Route
-                path="/dashboard"
-                element={
-                  <DashboardBox
-                    title="출석일수"
-                    img={attendance}
-                    content="26"
-                    desc="총 30일"
-                  />
-                }
-              />
+            <Route element={<MainHeader />}>
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/game" />
               <Route path="/setting" />
             </Route>
