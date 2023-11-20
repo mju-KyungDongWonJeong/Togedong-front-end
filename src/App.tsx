@@ -9,6 +9,8 @@ import SquatGameGuide from './assets/modal/SquatGameGuide';
 import Dashboard from './assets/pages/Dashboard';
 import MainHeader from './assets/component/MainHeader';
 
+import GameRoom from './assets/pages/Game/GameRoom';
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -17,6 +19,7 @@ function App() {
           <Routes>
             <Route element={<MainHeader />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/" element={<GameRoom />} />
               <Route path="/game" />
               <Route path="/setting" />
             </Route>
