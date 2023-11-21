@@ -68,22 +68,24 @@ const GameList = () => {
           </CreateRoomContainer>
         </GameListHeader>
         <GameListBackground>
-          <InputContainer>
-            <SearchInput
-              onSubmit={handleSubmit}
-              placeholder="방을 검색 하세요!"
-              search={search}
-              setSearch={setSearch}
+          <ContentContainer>
+            <InputContainer>
+              <SearchInput
+                onSubmit={handleSubmit}
+                placeholder="방을 검색 하세요!"
+                search={search}
+                setSearch={setSearch}
+              />
+            </InputContainer>
+            <List
+              title="첼린지"
+              secondTitle="참여자 수"
+              thridTitle="달성현황"
+              listData={roomData}
+              buttonType="navigate"
+              selectExercise={selectExercise}
             />
-          </InputContainer>
-          <List
-            title="첼린지"
-            secondTitle="참여자 수"
-            thridTitle="달성현황"
-            listData={roomData}
-            buttonType="navigate"
-            selectExercise={selectExercise}
-          />
+          </ContentContainer>
         </GameListBackground>
       </GameListContainer>
     </>
@@ -124,9 +126,16 @@ const GameListBackground = styled.div`
   min-height: 500px;
 `;
 
-const InputContainer = styled.div`
+const ContentContainer = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: end;
   padding: 10px 60px;
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  justify-content: end;
+  padding: 10px 0;
 `;
