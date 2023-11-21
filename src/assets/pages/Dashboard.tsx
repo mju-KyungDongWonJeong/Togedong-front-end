@@ -4,8 +4,7 @@ import badge from '../images/badge.svg';
 import record from '../images/record.svg';
 import SmallButton from '../component/SmallButton';
 import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { sidebarState } from '../store/atoms/Sidebar/state';
+import List from '../component/List';
 
 const Dashboard = () => {
   const [contentView, setContentView] = useState({
@@ -17,8 +16,6 @@ const Dashboard = () => {
     squat: false,
   });
 
-  const [status, setStatus] = useState(false);
-  const navbar = useRecoilValue(sidebarState);
   const dashboardBox = [
     {
       title: '보유 뱃지',
@@ -58,9 +55,22 @@ const Dashboard = () => {
     },
   ];
 
-  const handleParticipate = () => {
-    setStatus(true);
-  };
+  const [challengeData, setChallengeData] = useState([
+    {
+      id: 0,
+      firstContent: '팔굽 10일동안 100개씩',
+      secondContent: '114',
+      thirdContent: '-',
+      status: false,
+    },
+    {
+      id: 1,
+      firstContent: '팔굽 5일동안 100개씩',
+      secondContent: '124',
+      thirdContent: '15%',
+      status: true,
+    },
+  ]);
 
   return (
     <DashboardContainer>
@@ -90,25 +100,13 @@ const Dashboard = () => {
           />
         </ButtonContainer>
         {contentView.challenge && (
-          <ContentContainer>
-            <ContentHeader>
-              <ChallengeTitle navbar={navbar}>첼린지</ChallengeTitle>
-              <ChallengeCount>참여자 수</ChallengeCount>
-              <ChallengeStatus>달성현황</ChallengeStatus>
-            </ContentHeader>
-            <ContentBox>
-              <ChallengeTitle navbar={navbar}>
-                팔굽 10일동안 100개씩
-              </ChallengeTitle>
-              <ChallengeCount>124</ChallengeCount>
-              <ChallengeStatus>15%</ChallengeStatus>
-              {status ? (
-                <ParticipateText>참여중</ParticipateText>
-              ) : (
-                <SmallButton text="참여하기" onClick={handleParticipate} />
-              )}
-            </ContentBox>
-          </ContentContainer>
+          <List
+            title="첼린지"
+            secondTitle="참여자 수"
+            thridTitle="달성현황"
+            listData={challengeData}
+            buttonType="toggle"
+          />
         )}
         {contentView.rank && (
           <ContentContainer>
@@ -214,28 +212,6 @@ const ContentHeader = styled.div`
   font-weight: 500;
 `;
 
-const ChallengeTitle = styled.div<{ navbar: boolean }>`
-  width: ${(props) => (props.navbar ? '350px' : '500px')};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ChallengeCount = styled.div`
-  width: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ChallengeStatus = styled.div`
-  width: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 100px;
-`;
-
 const ContentBox = styled.div`
   display: flex;
   align-items: center;
@@ -243,13 +219,6 @@ const ContentBox = styled.div`
   height: 50px;
   color: ${({ theme }) => theme.colors.BLACK};
   font-size: 15px;
-`;
-
-const ParticipateText = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 94px;
 `;
 
 const SelectBox = styled.div`

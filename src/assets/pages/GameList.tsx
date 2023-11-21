@@ -6,17 +6,10 @@ import { useState } from 'react';
 import SmallButton from '../component/SmallButton';
 import CreateRoom from '../modal/CreateRoom';
 import SearchInput from '../component/SearchInput';
-
-type ExerciseState = {
-  PUSHUP: boolean;
-  SQUAT: boolean;
-};
+import List from '../component/List';
 
 const GameList = () => {
-  const [selectExercise, setSelectExercise] = useState<ExerciseState>({
-    PUSHUP: true,
-    SQUAT: false,
-  });
+  const [selectExercise, setSelectExercise] = useState('pushup');
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState<string>('');
 
@@ -30,30 +23,43 @@ const GameList = () => {
     setSearch('');
   };
 
+  const roomData = [
+    {
+      id: 0,
+      firstContent: '나랑 1대1 뜨실분 ',
+      secondContent: '김정호',
+      thirdContent: '1/2',
+      exercise: 'pushup',
+    },
+    {
+      id: 1,
+      firstContent: '너뭔데 ㅋㅋ',
+      secondContent: '경규혁',
+      thirdContent: '1/3',
+      exercise: 'squat',
+    },
+  ];
+
   return (
     <>
       {isOpen && <CreateRoom setIsOpen={setIsOpen} />}
       <GameListContainer>
         <GameListHeader>
           <GameSelectContainer>
-            <button
-              onClick={() => setSelectExercise({ PUSHUP: true, SQUAT: false })}
-            >
+            <button onClick={() => setSelectExercise('pushup')}>
               <ExerciseImg
                 isModal={false}
                 src={PushUp}
                 title="푸쉬업"
-                check={selectExercise.PUSHUP}
+                check={selectExercise === 'pushup'}
               />
             </button>
-            <button
-              onClick={() => setSelectExercise({ PUSHUP: false, SQUAT: true })}
-            >
+            <button onClick={() => setSelectExercise('squat')}>
               <ExerciseImg
                 isModal={false}
                 src={Squat}
                 title="스쿼트"
-                check={selectExercise.SQUAT}
+                check={selectExercise === 'squat'}
               />
             </button>
           </GameSelectContainer>
@@ -70,6 +76,14 @@ const GameList = () => {
               setSearch={setSearch}
             />
           </InputContainer>
+          <List
+            title="첼린지"
+            secondTitle="참여자 수"
+            thridTitle="달성현황"
+            listData={roomData}
+            buttonType="navigate"
+            selectExercise={selectExercise}
+          />
         </GameListBackground>
       </GameListContainer>
     </>
