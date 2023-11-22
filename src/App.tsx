@@ -9,7 +9,7 @@ import SquatGameGuide from './assets/modal/SquatGameGuide';
 import Dashboard from './assets/pages/Dashboard';
 import MainHeader from './assets/component/MainHeader';
 
-import GameRoom from './assets/pages/Game/GameRoom';
+import GameRoom from './assets/room/openvidu/GameRoom';
 
 function App() {
   return (
