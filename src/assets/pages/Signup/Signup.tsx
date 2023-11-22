@@ -9,7 +9,7 @@ import LargeButton from '../../component/LargeButton';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { validation } from './Validation';
 
-import { SignupError, SignupResponse } from '../../type/SignupType';
+import { SignupError, SignupResponse } from '../../type/PostSignupPayload';
 import { PostSignup } from '../../../api/\bauth/Signup';
 import { useNavigate } from 'react-router-dom';
 
@@ -41,10 +41,10 @@ const Signup = () => {
   };
 
   const handleError = (error: SignupError) => {
-    if (error.status == 409) {
-      alert(error.cause);
-    } else if (error.validation) {
+    if (error.validation) {
       alert(error.validation[0].message);
+    } else if (error.status == 409) {
+      alert(error.cause);
     }
   };
 

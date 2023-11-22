@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { SignupInputs } from '../../assets/pages/Signup/Signup';
-import { SignupError, SignupResponse } from '../../assets/type/SignupType';
+import {
+  SignupError,
+  SignupResponse,
+} from '../../assets/type/PostSignupPayload';
 import { Axios } from '../Axios';
 
 interface PostSignupProps {
