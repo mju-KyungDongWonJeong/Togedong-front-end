@@ -41,7 +41,7 @@ const Login = () => {
   const handleError = (error: LoginError) => {
     if (error.validation) {
       alert(error.validation[0].message);
-    } else if (error.status == 409) {
+    } else if (error.status == 404) {
       alert(error.cause);
     }
   };
