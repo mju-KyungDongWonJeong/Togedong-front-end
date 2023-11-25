@@ -1,21 +1,25 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const SearchInput = () => {
-  const navigate = useNavigate();
-  const [search, setSearch] = useState<string>('');
-  const handleSubmit = () => {
-    navigate(`/dashboard/${search}`);
-  };
+interface InputProps {
+  placeholder: string;
+  onSubmit: React.FormEventHandler<HTMLFormElement>;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  search: string;
+}
 
+const SearchInput = ({
+  onSubmit,
+  placeholder,
+  setSearch,
+  search,
+}: InputProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
   return (
-    <InputContainer onSubmit={handleSubmit}>
+    <InputContainer onSubmit={onSubmit}>
       <InputContent
-        placeholder="친구를 검색하세요!"
+        placeholder={placeholder}
         value={search}
         onChange={handleChange}
       />

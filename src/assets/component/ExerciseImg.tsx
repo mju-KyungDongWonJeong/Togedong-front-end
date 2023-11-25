@@ -4,12 +4,13 @@ interface ExerciseImg {
   src: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   title: string;
   check: boolean;
+  isModal: boolean;
 }
 
-const ExerciseImg = ({ src, title, check }: ExerciseImg) => {
+const ExerciseImg = ({ isModal, src, title, check }: ExerciseImg) => {
   return (
     <ExerciseImgContainer check={check}>
-      <ExerciseImage as={src} />
+      <ExerciseImage as={src} isModal={isModal} />
       <ExerciseName>{title}</ExerciseName>
     </ExerciseImgContainer>
   );
@@ -28,9 +29,9 @@ const ExerciseImgContainer = styled.div<{ check: boolean }>`
   }
 `;
 
-const ExerciseImage = styled.img`
-  width: 100px;
-  height: 120px;
+const ExerciseImage = styled.img<{ isModal: boolean }>`
+  width: ${(props) => (props.isModal ? '100px' : '170px')};
+  height: ${(props) => (props.isModal ? '120px' : '190px')};
   margin-bottom: 15px;
 `;
 
