@@ -10,6 +10,7 @@ interface ListProps {
   listData: ListData[];
   buttonType: 'toggle' | 'navigate';
   selectExercise?: string;
+  isMine?: boolean;
 }
 
 export interface ListData {
@@ -28,6 +29,7 @@ const List = ({
   listData,
   buttonType,
   selectExercise,
+  isMine,
 }: ListProps) => {
   const navbar = useRecoilValue(sidebarState);
 
@@ -41,7 +43,12 @@ const List = ({
       {listData.map(
         (item) =>
           selectExercise === item.exercise && (
-            <ListItem key={item.id} rowData={item} buttonType={buttonType} />
+            <ListItem
+              key={item.id}
+              rowData={item}
+              buttonType={buttonType}
+              isMine={isMine}
+            />
           ),
       )}
     </ListContainer>

@@ -7,11 +7,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface ListItemProps {
+  isMine?: boolean;
   rowData: ListData;
   buttonType: 'toggle' | 'navigate';
 }
 
-const ListItem = ({ rowData, buttonType }: ListItemProps) => {
+const ListItem = ({ rowData, buttonType, isMine }: ListItemProps) => {
   const navbar = useRecoilValue(sidebarState);
   const navigate = useNavigate();
   const [isParticipated, setIsParticipated] = useState(rowData.status ?? false);
@@ -25,13 +26,17 @@ const ListItem = ({ rowData, buttonType }: ListItemProps) => {
       <ListTitle navbar={navbar}>{rowData.firstContent}</ListTitle>
       <ListSecondTitle>{rowData.secondContent}</ListSecondTitle>
       <ListThirdTitle>{rowData.thirdContent}</ListThirdTitle>
-      {isParticipated ? (
-        <ParticipateText>참여중</ParticipateText>
-      ) : (
-        <SmallButton
-          text={buttonType === 'toggle' ? '참여하기' : '참가하기'}
-          onClick={buttonType === 'toggle' ? toggleButton : handleNavigate}
-        />
+      {isMine && (
+        <>
+          {isParticipated ? (
+            <ParticipateText>참여중</ParticipateText>
+          ) : (
+            <SmallButton
+              text={buttonType === 'toggle' ? '참여하기' : '참가하기'}
+              onClick={buttonType === 'toggle' ? toggleButton : handleNavigate}
+            />
+          )}
+        </>
       )}
     </ListBox>
   );

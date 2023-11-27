@@ -3,10 +3,19 @@ import DashboardBox from '../component/DashboardBox';
 import badge from '../images/badge.svg';
 import record from '../images/record.svg';
 import SmallButton from '../component/SmallButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import List from '../component/List';
+import { useParams } from 'react-router-dom';
+import { GetDashboard } from '../../api/GetDashboard';
+import {
+  BestRecord,
+  DashboardError,
+  DashboardResponse,
+} from '../type/GetDashboardPayload';
 
 const Dashboard = () => {
+  const { userName } = useParams();
+  const [dashboardRes, setDashboardRes] = useState<DashboardResponse>();
   const [contentView, setContentView] = useState({
     rank: false,
     challenge: true,
@@ -15,27 +24,6 @@ const Dashboard = () => {
     pushup: true,
     squat: false,
   });
-
-  const dashboardBox = [
-    {
-      title: '보유 뱃지',
-      img: badge,
-      content: '5개',
-      desc: '35%달성',
-    },
-    {
-      title: '최고기록',
-      img: record,
-      content: '26개',
-      desc: '스쿼트',
-    },
-    {
-      title: '최고기록',
-      img: record,
-      content: '26개',
-      desc: '푸쉬업',
-    },
-  ];
 
   const RANKDATA = [
     {
@@ -72,78 +60,101 @@ const Dashboard = () => {
     },
   ]);
 
+  useEffect(() => {
+    GetDashboard({ userName, callbackFunction, handleError });
+  }, []);
+
+  const callbackFunction = (data: DashboardResponse) => {
+    setDashboardRes(data);
+  };
+  const handleError = (error: DashboardError) => {
+    alert(error.cause);
+  };
+
   return (
-    <DashboardContainer>
-      <DashboardHeader>
-        <HeaderContent>김정호님 환영해요!</HeaderContent>
-      </DashboardHeader>
-      <DashboardLayout>
-        <DashboardBoxContainer>
-          {dashboardBox.map((item, index) => (
-            <DashboardBox
-              title={item.title}
-              img={item.img}
-              content={item.content}
-              desc={item.desc}
-              key={index}
-            />
-          ))}
-        </DashboardBoxContainer>
-        <ButtonContainer>
-          <SmallButton
-            text="첼린지"
-            onClick={() => setContentView({ rank: false, challenge: true })}
-          />
-          <SmallButton
-            text="랭킹"
-            onClick={() => setContentView({ rank: true, challenge: false })}
-          />
-        </ButtonContainer>
-        {contentView.challenge && (
-          <List
-            title="첼린지"
-            secondTitle="참여자 수"
-            thridTitle="달성현황"
-            listData={challengeData}
-            buttonType="toggle"
-          />
-        )}
-        {contentView.rank && (
-          <ContentContainer>
-            <SelectBox>
-              <SelectExercise
-                state={rankExercise.pushup}
-                onClick={() => {
-                  setRankExercise({ pushup: true, squat: false });
-                }}
-              >
-                푸쉬업
-              </SelectExercise>
-              <SelectExercise
-                state={rankExercise.squat}
-                onClick={() => {
-                  setRankExercise({ pushup: false, squat: true });
-                }}
-              >
-                스쿼트
-              </SelectExercise>
-            </SelectBox>
-            <ContentHeader>
-              <Rank>등수</Rank>
-              <RankName>닉네임</RankName>
-              <RankCount>개수</RankCount>
-            </ContentHeader>
-            {RANKDATA.map((item, index) => (
-              <ContentBox key={index}>
-                <Rank>{item.rank}</Rank>
-                <RankName>{item.name}</RankName>
-                <RankCount>{item.count}</RankCount>
-              </ContentBox>
-            ))}
-          </ContentContainer>
-        )}
-      </DashboardLayout>
-    </DashboardContainer>
+    <>
+      {dashboardRes && (
+        <DashboardContainer>
+          <DashboardHeader>
+            <HeaderContent>{userName}님 환영해요!</HeaderContent>
+          </DashboardHeader>
+          <DashboardLayout>
+            <DashboardBoxContainer>
+              <DashboardBox
+                title="보유 뱃지"
+                img={badge}
+                content={dashboardRes.badgeCount}
+              />
+
+              {dashboardRes.bestRecords.map((item, index) => (
+                <DashboardBox
+                  key={index}
+                  title="최고 기록"
+                  img={record}
+                  content={`${item.record}개`}
+                  desc={item.exerciseName}
+                />
+              ))}
+            </DashboardBoxContainer>
+
+            <ButtonContainer>
+              <SmallButton
+                text="첼린지"
+                onClick={() => setContentView({ rank: false, challenge: true })}
+              />
+              <SmallButton
+                text="랭킹"
+                onClick={() => setContentView({ rank: true, challenge: false })}
+              />
+            </ButtonContainer>
+            {contentView.challenge && (
+              <List
+                title="첼린지"
+                secondTitle="참여자 수"
+                thridTitle="달성현황"
+                listData={challengeData}
+                buttonType="toggle"
+                isMine={dashboardRes.isMine}
+              />
+            )}
+            {contentView.rank && (
+              <ContentContainer>
+                <SelectBox>
+                  <SelectExercise
+                    state={rankExercise.pushup}
+                    onClick={() => {
+                      setRankExercise({ pushup: true, squat: false });
+                    }}
+                  >
+                    푸쉬업
+                  </SelectExercise>
+                  <SelectExercise
+                    state={rankExercise.squat}
+                    onClick={() => {
+                      setRankExercise({ pushup: false, squat: true });
+                    }}
+                  >
+                    스쿼트
+                  </SelectExercise>
+                </SelectBox>
+                <ContentHeader>
+                  <Rank>등수</Rank>
+                  <RankName>닉네임</RankName>
+                  <RankCount>개수</RankCount>
+                </ContentHeader>
+                {RANKDATA.map((item, index) => (
+                  <ContentBox key={index}>
+                    <Rank>{item.rank}</Rank>
+                    <RankName>{item.name}</RankName>
+                    <RankCount>{item.count}</RankCount>
+                  </ContentBox>
+                ))}
+              </ContentContainer>
+            )}
+          </DashboardLayout>
+        </DashboardContainer>
+      )}
+    </>
   );
 };
 
