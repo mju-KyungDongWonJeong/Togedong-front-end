@@ -5,16 +5,13 @@ import record from '../images/record.svg';
 import SmallButton from '../component/SmallButton';
 import { useEffect, useState } from 'react';
 import List from '../component/List';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { GetDashboard } from '../../api/GetDashboard';
-import {
-  BestRecord,
-  DashboardError,
-  DashboardResponse,
-} from '../type/GetDashboardPayload';
+import { DashboardError, DashboardResponse } from '../type/GetDashboardPayload';
 
 const Dashboard = () => {
   const { userName } = useParams();
+  const navigate = useNavigate();
   const [dashboardRes, setDashboardRes] = useState<DashboardResponse>();
   const [contentView, setContentView] = useState({
     rank: false,
@@ -62,13 +59,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     GetDashboard({ userName, callbackFunction, handleError });
-  }, []);
+  }, [userName]);
 
   const callbackFunction = (data: DashboardResponse) => {
     setDashboardRes(data);
   };
   const handleError = (error: DashboardError) => {
     alert(error.cause);
+    navigate(`/dashboard/${localStorage.getItem('userName')}`);
   };
 
   return (
