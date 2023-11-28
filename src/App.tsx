@@ -20,11 +20,11 @@ function App() {
           <Routes>
             <Route element={<MainHeader />}>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/" element={<GameRoom />} />
               <Route path="/game" />
               <Route path="/gamelist" element={<GameList />} />
               <Route path="/setting" />
             </Route>
+            <Route path="/gameroom" element={<GameRoom />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/pushupguide" element={<PushUpGameGuide />} />
