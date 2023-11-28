@@ -1,8 +1,13 @@
 export interface DashboardResponse {
   userName: string;
-  badgeCount: number;
+  badgeResponse: BadgeResponse;
   bestRecords: BestRecord[];
   isMine: boolean;
+}
+
+interface BadgeResponse {
+  badgeCount: number;
+  badgePercent: number;
 }
 
 export interface DashboardError {

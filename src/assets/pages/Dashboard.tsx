@@ -81,7 +81,8 @@ const Dashboard = () => {
               <DashboardBox
                 title="보유 뱃지"
                 img={badge}
-                content={dashboardRes.badgeCount}
+                content={`${dashboardRes.badgeResponse.badgeCount}개`}
+                desc={`${dashboardRes.badgeResponse.badgePercent}% 달성`}
               />
 
               {dashboardRes.bestRecords.map((item, index) => (
