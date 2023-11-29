@@ -21,6 +21,7 @@ interface SideBarState {
 
 const SideBar = () => {
   const navigate = useNavigate();
+  const userName = localStorage.getItem('userName');
   const [sideState, setSideState] = useState({
     Dashboard: true,
     Game: false,
@@ -30,7 +31,7 @@ const SideBar = () => {
   const sideComponents: SideBar[] = [
     {
       content: 'Dashboard',
-      path: '/dashboard',
+      path: `/dashboard/${userName}`,
       src: DashBoard,
       state: { Dashboard: true, Game: false, Setting: false },
     },

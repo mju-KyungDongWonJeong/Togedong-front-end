@@ -15,11 +15,12 @@ const MainHeader = () => {
 
   const handleLogout = () => {
     navigate('/login');
+    alert('로그아웃 하셨습니다!');
+    localStorage.removeItem('accessToken');
   };
 
   const handleSideBar = () => {
     setNavbar((props) => !props);
-    console.log(navbar);
   };
 
   const handleSubmit = () => {

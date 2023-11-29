@@ -18,6 +18,7 @@ export interface LoginInputs {
 
 const Login = () => {
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -35,7 +36,8 @@ const Login = () => {
   const callbackFunction = (data: LoginResponse) => {
     alert(data.message);
     localStorage.setItem('accessToken', data.data.accessToken);
-    navigate('/dashboard');
+    localStorage.setItem('userName', data.data.userName);
+    navigate(`/dashboard/${data.data.userName}`);
   };
 
   const handleError = (error: LoginError) => {

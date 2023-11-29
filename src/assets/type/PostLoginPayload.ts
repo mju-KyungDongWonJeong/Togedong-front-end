@@ -1,11 +1,12 @@
 export interface LoginResponse {
-  data: Token;
+  data: Data;
   message: string;
   status: string;
 }
 
-interface Token {
+interface Data {
   accessToken: string;
+  userName: string;
 }
 
 export interface LoginError {
