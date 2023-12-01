@@ -19,8 +19,7 @@ function App() {
         <Frame>
           <Routes>
             <Route element={<MainHeader />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/game" />
+              <Route path="/dashboard/:userName" element={<Dashboard />} />
               <Route path="/gamelist" element={<GameList />} />
               <Route path="/setting" />
             </Route>
