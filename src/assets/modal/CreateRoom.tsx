@@ -4,7 +4,13 @@ import { ReactComponent as Squat } from '../images/squat.svg';
 import { ReactComponent as Cancle } from '../images/cancel.svg';
 import ExerciseImg from '../component/ExerciseImg';
 import SmallButton from '../component/SmallButton';
-import { useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
+import { OpenVidu } from 'openvidu-browser';
+import { useNavigate } from 'react-router-dom';
+
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? '' : 'https://togedong.kro.kr/';
 
 type ExerciseState = {
   PUSHUP: boolean;
@@ -24,11 +30,16 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
     PUSHUP: true,
     SQUAT: false,
   });
+  const navigate = useNavigate();
+  const [mySessionId, setMySessionId] = useState('');
   const [passwordBox, setPasswordBox] = useState<boolean>(false);
   const [title, setTitle] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [countPerson, setCountPerson] = useState<string>('1');
-  const handleCreate = () => {};
+  const handleCreate = () => {
+    createSession();
+    navigate('/gameroom');
+  };
   const handleCancle = () => {
     setIsOpen(false);
   };
@@ -46,6 +57,45 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
 
   const selectPerson = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCountPerson(e.target.value);
+  };
+
+  const test_data = {
+    title: title, // 방제목
+    memberLimit: Number(countPerson), // 사람 수
+    exerciseName: selectExercise, // 운동 이름
+    hasPassword: passwordBox, // 비밀번호 여부
+    password: password, // 비밀번호
+  };
+
+  const getToken = useCallback(async () => {
+    return createSession().then((roomId) => createToken(roomId));
+  }, [mySessionId]);
+
+  const createSession = async () => {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + 'api/room',
+      test_data,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      },
+    );
+    console.log(response);
+    return response.data.roomId; // The sessionId
+  };
+
+  const createToken = async (roomId: string) => {
+    const response = await axios.post(
+      // APPLICATION_SERVER_URL + 'api/room/' + roomId + '/connections',
+      APPLICATION_SERVER_URL + 'api/room/' + roomId,
+      {},
+      {
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+    return response.data; // The token
   };
 
   return (
@@ -112,9 +162,9 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
             </button>
           </ButtonContainer>
         </ContentContainer>
-        <CancleButton onClick={handleCancle}>
+        <CancelButton onClick={handleCancle}>
           <Cancle />
-        </CancleButton>
+        </CancelButton>
       </CreateRoomContainer>
     </>
   );
@@ -236,7 +286,7 @@ const ButtonContainer = styled.div`
   justify-content: end;
 `;
 
-const CancleButton = styled.button`
+const CancelButton = styled.button`
   position: absolute;
   top: 20px;
   right: 20px;

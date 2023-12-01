@@ -4,14 +4,17 @@ import '@tensorflow/tfjs-backend-webgl';
 import UserVideoComponent from './UserVideoComponent';
 import axios from 'axios';
 
+// https://togedong.kro.kr/
+
+// const APPLICATION_SERVER_URL =
+// process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
+
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
+  process.env.NODE_ENV === 'production' ? '' : 'http://togedong.kro.kr/';
 
 export default function GameRoom() {
-  const [mySessionId, setMySessionId] = useState('test');
-  const [myUserName, setMyUserName] = useState(
-    `Participant${Math.floor(Math.random() * 100)}`,
-  );
+  const [mySessionId, setMySessionId] = useState('');
+  const [myUserName, setMyUserName] = useState('username');
   const [session, setSession] = useState(undefined);
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
@@ -112,8 +115,8 @@ export default function GameRoom() {
     OV.current = new OpenVidu();
     setSession(undefined);
     setSubscribers([]);
-    setMySessionId('SessionA');
-    setMyUserName('Participant' + Math.floor(Math.random() * 100));
+    setMySessionId('');
+    setMyUserName('username');
     setMainStreamManager(undefined);
     setPublisher(undefined);
   }, [session]);
@@ -191,26 +194,62 @@ export default function GameRoom() {
    * Visit https://docs.openvidu.io/en/stable/application-server to learn
    * more about the integration of OpenVidu in your application server.
    */
+  // const getToken = useCallback(async () => {
+  //   return createSession(mySessionId).then((sessionId) =>
+  //     createToken(sessionId),
+  //   );
+  // }, [mySessionId]);
+
+  // const createSession = async (sessionId) => {
+  //   const response = await axios.post(
+  //     APPLICATION_SERVER_URL + 'api/sessions',
+  //     { customSessionId: sessionId },
+  //     {
+  //       headers: { 'Content-Type': 'application/json' },
+  //     },
+  //   );
+  //   return response.data; // The sessionId
+  // };
+
+  // const createToken = async (sessionId) => {
+  //   const response = await axios.post(
+  //     APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
+  //     {},
+  //     {
+  //       headers: { 'Content-Type': 'application/json' },
+  //     },
+  //   );
+  //   return response.data; // The token
+  // };
+
+  // 내 코드
+
+  const test_data = {
+    title: 'test',
+    memberLimit: 2,
+    exerciseName: 'PUSH_UP',
+    hasPassword: false,
+    password: '1234',
+  };
+
   const getToken = useCallback(async () => {
-    return createSession(mySessionId).then((sessionId) =>
-      createToken(sessionId),
-    );
+    return createSession(mySessionId).then((roomId) => createToken(roomId));
   }, [mySessionId]);
 
-  const createSession = async (sessionId) => {
+  const createSession = async () => {
     const response = await axios.post(
-      APPLICATION_SERVER_URL + 'api/sessions',
-      { customSessionId: sessionId },
+      APPLICATION_SERVER_URL + 'api/room',
+      test_data,
       {
         headers: { 'Content-Type': 'application/json' },
       },
     );
-    return response.data; // The sessionId
+    return response.data.roomId; // The sessionId
   };
 
-  const createToken = async (sessionId) => {
+  const createToken = async (roomId) => {
     const response = await axios.post(
-      APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
+      APPLICATION_SERVER_URL + 'api/room/' + roomId + '/connections',
       {},
       {
         headers: { 'Content-Type': 'application/json' },
@@ -218,6 +257,7 @@ export default function GameRoom() {
     );
     return response.data; // The token
   };
+
   return (
     <div className="container">
       {session === undefined ? (
