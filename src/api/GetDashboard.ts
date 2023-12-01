@@ -7,14 +7,14 @@ import { Axios } from './Axios';
 
 interface GetDashboardProps {
   userName?: string;
-  callbackFunction: (data: DashboardResponse) => void;
-  handleError: (error: DashboardError) => void;
+  handleDashboardData: (data: DashboardResponse) => void;
+  handleDashboardError: (error: DashboardError) => void;
 }
 
 export const GetDashboard = async ({
   userName,
-  callbackFunction,
-  handleError,
+  handleDashboardData,
+  handleDashboardError,
 }: GetDashboardProps) => {
   try {
     const res = await Axios.get(`api/dash-board/${userName}`, {
@@ -26,10 +26,10 @@ export const GetDashboard = async ({
       },
     });
 
-    callbackFunction(res.data.data);
+    handleDashboardData(res.data.data);
   } catch (error) {
     if (axios.isAxiosError<DashboardError>(error) && error.response) {
-      handleError(error.response.data);
+      handleDashboardError(error.response.data);
     }
   }
 };

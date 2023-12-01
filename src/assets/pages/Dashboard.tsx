@@ -8,37 +8,18 @@ import List from '../component/List';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GetDashboard } from '../../api/GetDashboard';
 import { DashboardError, DashboardResponse } from '../type/GetDashboardPayload';
+import { GetRank } from '../../api/GetRank';
+import { GetRankError, GetRankPayload } from '../type/GetRankPayload';
 
 const Dashboard = () => {
   const { userName } = useParams();
   const navigate = useNavigate();
   const [dashboardRes, setDashboardRes] = useState<DashboardResponse>();
-  const [contentView, setContentView] = useState({
-    rank: false,
-    challenge: true,
-  });
-  const [rankExercise, setRankExercise] = useState({
-    pushup: true,
-    squat: false,
-  });
-
-  const RANKDATA = [
-    {
-      rank: '1등',
-      name: '김정호',
-      count: '75개',
-    },
-    {
-      rank: '2등',
-      name: '전석민',
-      count: '25개',
-    },
-    {
-      rank: '3등',
-      name: '난돌민',
-      count: '1개',
-    },
-  ];
+  const [rankRes, setRankRes] = useState<GetRankPayload>();
+  const [contentView, setContentView] = useState('challenge');
+  const [rankExercise, setRankExercise] = useState<'PUSH_UP' | 'SQUAT'>(
+    'PUSH_UP',
+  );
 
   const [challengeData, setChallengeData] = useState([
     {
@@ -58,15 +39,27 @@ const Dashboard = () => {
   ]);
 
   useEffect(() => {
-    GetDashboard({ userName, callbackFunction, handleError });
+    GetDashboard({ userName, handleDashboardData, handleDashboardError });
   }, [userName]);
 
-  const callbackFunction = (data: DashboardResponse) => {
+  const handleDashboardData = (data: DashboardResponse) => {
     setDashboardRes(data);
   };
-  const handleError = (error: DashboardError) => {
+  const handleDashboardError = (error: DashboardError) => {
     alert(error.cause);
     navigate(`/dashboard/${localStorage.getItem('userName')}`);
+  };
+
+  const handleRankExercise = (exerciseName: 'PUSH_UP' | 'SQUAT') => {
+    GetRank({ exerciseName, handleRankData, handleRankError });
+  };
+
+  const handleRankData = (data: GetRankPayload) => {
+    setRankRes(data);
+  };
+
+  const handleRankError = (error: GetRankError) => {
+    alert(error.cause);
   };
 
   return (
@@ -99,14 +92,21 @@ const Dashboard = () => {
             <ButtonContainer>
               <SmallButton
                 text="첼린지"
-                onClick={() => setContentView({ rank: false, challenge: true })}
+                onClick={() => setContentView('challenge')}
               />
               <SmallButton
                 text="랭킹"
-                onClick={() => setContentView({ rank: true, challenge: false })}
+                onClick={() => {
+                  setContentView('rank');
+                  GetRank({
+                    exerciseName: rankExercise,
+                    handleRankData,
+                    handleRankError,
+                  });
+                }}
               />
             </ButtonContainer>
-            {contentView.challenge && (
+            {contentView === 'challenge' && (
               <List
                 title="첼린지"
                 secondTitle="참여자 수"
@@ -116,21 +116,23 @@ const Dashboard = () => {
                 isMine={dashboardRes.isMine}
               />
             )}
-            {contentView.rank && (
+            {contentView === 'rank' && (
               <ContentContainer>
                 <SelectBox>
                   <SelectExercise
-                    state={rankExercise.pushup}
+                    state={rankExercise === 'PUSH_UP'}
                     onClick={() => {
-                      setRankExercise({ pushup: true, squat: false });
+                      setRankExercise('PUSH_UP');
+                      handleRankExercise('PUSH_UP');
                     }}
                   >
                     푸쉬업
                   </SelectExercise>
                   <SelectExercise
-                    state={rankExercise.squat}
+                    state={rankExercise === 'SQUAT'}
                     onClick={() => {
-                      setRankExercise({ pushup: false, squat: true });
+                      setRankExercise('SQUAT');
+                      handleRankExercise('SQUAT');
                     }}
                   >
                     스쿼트
@@ -141,13 +143,14 @@ const Dashboard = () => {
                   <RankName>닉네임</RankName>
                   <RankCount>개수</RankCount>
                 </ContentHeader>
-                {RANKDATA.map((item, index) => (
-                  <ContentBox key={index}>
-                    <Rank>{item.rank}</Rank>
-                    <RankName>{item.name}</RankName>
-                    <RankCount>{item.count}</RankCount>
-                  </ContentBox>
-                ))}
+                {rankRes &&
+                  rankRes.data.map((item, index) => (
+                    <ContentBox key={index}>
+                      <Rank>{index + 1}</Rank>
+                      <RankName>{item.name}</RankName>
+                      <RankCount>{item.count}</RankCount>
+                    </ContentBox>
+                  ))}
               </ContentContainer>
             )}
           </DashboardLayout>
