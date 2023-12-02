@@ -4,12 +4,17 @@ import badge from '../images/badge.svg';
 import record from '../images/record.svg';
 import SmallButton from '../component/SmallButton';
 import { useEffect, useState } from 'react';
-import List from '../component/List';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GetDashboard } from '../../api/GetDashboard';
 import { DashboardError, DashboardResponse } from '../type/GetDashboardPayload';
 import { GetRank } from '../../api/GetRank';
 import { GetRankError, GetRankPayload } from '../type/GetRankPayload';
+import { GetChallenge } from '../../api/GetChallenge';
+import {
+  ChallengeError,
+  GetChallengeResponse,
+} from '../type/GetChallengePayload';
+import ChallengeList from '../component/ChallengeList';
 
 const Dashboard = () => {
   const { userName } = useParams();
@@ -20,27 +25,16 @@ const Dashboard = () => {
   const [rankExercise, setRankExercise] = useState<'PUSH_UP' | 'SQUAT'>(
     'PUSH_UP',
   );
-
-  const [challengeData, setChallengeData] = useState([
-    {
-      id: 0,
-      firstContent: '팔굽 10일동안 100개씩',
-      secondContent: '114',
-      thirdContent: '-',
-      status: false,
-    },
-    {
-      id: 1,
-      firstContent: '팔굽 5일동안 100개씩',
-      secondContent: '124',
-      thirdContent: '15%',
-      status: true,
-    },
-  ]);
+  const [challengeData, setChallengeData] = useState<GetChallengeResponse>();
+  const [reRender, setReRender] = useState(false);
 
   useEffect(() => {
     GetDashboard({ userName, handleDashboardData, handleDashboardError });
   }, [userName]);
+
+  useEffect(() => {
+    GetChallenge({ userName, handleChallengeData, handleBoardError });
+  }, [userName, reRender]);
 
   const handleDashboardData = (data: DashboardResponse) => {
     setDashboardRes(data);
@@ -51,15 +45,19 @@ const Dashboard = () => {
   };
 
   const handleRankExercise = (exerciseName: 'PUSH_UP' | 'SQUAT') => {
-    GetRank({ exerciseName, handleRankData, handleRankError });
+    GetRank({ exerciseName, handleRankData, handleBoardError });
   };
 
   const handleRankData = (data: GetRankPayload) => {
     setRankRes(data);
   };
 
-  const handleRankError = (error: GetRankError) => {
+  const handleBoardError = (error: GetRankError | ChallengeError) => {
     alert(error.cause);
+  };
+
+  const handleChallengeData = (data: GetChallengeResponse) => {
+    setChallengeData(data);
   };
 
   return (
@@ -101,19 +99,20 @@ const Dashboard = () => {
                   GetRank({
                     exerciseName: rankExercise,
                     handleRankData,
-                    handleRankError,
+                    handleBoardError,
                   });
                 }}
               />
             </ButtonContainer>
-            {contentView === 'challenge' && (
-              <List
+            {contentView === 'challenge' && challengeData?.challenges && (
+              <ChallengeList
+                userName={userName}
                 title="첼린지"
-                secondTitle="참여자 수"
-                thridTitle="달성현황"
-                listData={challengeData}
-                buttonType="toggle"
-                isMine={dashboardRes.isMine}
+                count="참여자 수"
+                status="달성현황"
+                listData={challengeData.challenges}
+                isMine={challengeData.isMine}
+                setReRender={setReRender}
               />
             )}
             {contentView === 'rank' && (
