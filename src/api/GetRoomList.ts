@@ -6,12 +6,14 @@ import {
 } from '../assets/type/GetRoomListPayload';
 
 interface GetRoomListProps {
+  search?: string;
   selectExercise: 'PUSH_UP' | 'SQUAT';
   handleGameRoomList: (data: GetRoomListPayload) => void;
   handleError: (error: GetRoomListError) => void;
 }
 
 export const GetRoomList = async ({
+  search,
   selectExercise,
   handleGameRoomList,
   handleError,
@@ -22,6 +24,7 @@ export const GetRoomList = async ({
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
       params: {
+        search,
         exerciseName: selectExercise,
       },
     });

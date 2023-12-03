@@ -32,12 +32,13 @@ const GameList = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(search);
+    GetRoomList({ selectExercise, handleGameRoomList, handleError, search });
     setSearch('');
   };
 
   const handleGameRoomList = (data: GetRoomListPayload) => {
     setRoomList(data.data.rooms);
+    console.log(data);
   };
 
   const handleError = (error: GetRoomListError) => {
