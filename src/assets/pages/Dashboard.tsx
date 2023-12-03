@@ -26,7 +26,6 @@ const Dashboard = () => {
     'PUSH_UP',
   );
   const [challengeData, setChallengeData] = useState<GetChallengeResponse>();
-  const [reRender, setReRender] = useState(false);
 
   useEffect(() => {
     GetDashboard({ userName, handleDashboardData, handleDashboardError });
@@ -34,7 +33,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     GetChallenge({ userName, handleChallengeData, handleBoardError });
-  }, [userName, reRender]);
+  }, [userName]);
 
   const handleDashboardData = (data: DashboardResponse) => {
     setDashboardRes(data);
@@ -112,7 +111,7 @@ const Dashboard = () => {
                 status="달성현황"
                 listData={challengeData.challenges}
                 isMine={challengeData.isMine}
-                setReRender={setReRender}
+                setChallengeData={setChallengeData}
               />
             )}
             {contentView === 'rank' && (

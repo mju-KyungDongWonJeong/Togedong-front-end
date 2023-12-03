@@ -2,14 +2,20 @@ import styled from 'styled-components';
 import { ReactComponent as Logo } from '../images/logo_white.svg';
 import { PostChallengeProps } from '../../api/PostChallenge';
 import { PostChallengePayload } from '../type/PostChallengePayload';
-import { ChallengeError } from '../type/GetChallengePayload';
+import {
+  ChallengeError,
+  GetChallengeResponse,
+} from '../type/GetChallengePayload';
+import { GetChallenge } from '../../api/GetChallenge';
 
 interface ChallengeModalProps {
   userName?: string;
   challengeName: 'pushUp ' | 'squat';
   setChallengeModal: React.Dispatch<React.SetStateAction<boolean>>;
   challengeApply: (props: PostChallengeProps) => Promise<void>;
-  setReRender: React.Dispatch<React.SetStateAction<boolean>>;
+  setChallengeData: React.Dispatch<
+    React.SetStateAction<GetChallengeResponse | undefined>
+  >;
 }
 
 const ChallengeApply = ({
@@ -17,7 +23,7 @@ const ChallengeApply = ({
   challengeName,
   setChallengeModal,
   challengeApply,
-  setReRender,
+  setChallengeData,
 }: ChallengeModalProps) => {
   const handleAgree = () => {
     challengeApply({
@@ -33,13 +39,16 @@ const ChallengeApply = ({
 
   const handlePostChallenge = (data: PostChallengePayload) => {
     alert(data.message);
-    setReRender((prev) => !prev);
+    GetChallenge({ userName, handleChallengeData, handleBoardError });
     setChallengeModal(false);
   };
   const handleBoardError = (error: ChallengeError) => {
     alert(error.cause);
   };
 
+  const handleChallengeData = (data: GetChallengeResponse) => {
+    setChallengeData(data);
+  };
   return (
     <>
       <BackGround></BackGround>

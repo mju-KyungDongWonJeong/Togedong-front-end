@@ -22,7 +22,6 @@ export const GetRank = async ({
         exerciseName: exerciseName,
       },
     });
-
     handleRankData(res.data);
   } catch (error) {
     if (axios.isAxiosError<GetRankError>(error) && error.response) {

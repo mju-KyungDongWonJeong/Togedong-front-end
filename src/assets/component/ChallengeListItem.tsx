@@ -3,7 +3,7 @@ import SmallButton from './SmallButton';
 import { useRecoilValue } from 'recoil';
 import { sidebarState } from '../store/atoms/Sidebar/state';
 import { useState } from 'react';
-import { Challenge } from '../type/GetChallengePayload';
+import { Challenge, GetChallengeResponse } from '../type/GetChallengePayload';
 import ChallengeApply from '../modal/ChallengeApply';
 import { PostChallenge } from '../../api/PostChallenge';
 
@@ -12,7 +12,9 @@ interface ListItemProps {
   challengeName: 'pushUp ' | 'squat';
   isMine?: boolean;
   rowData: Challenge;
-  setReRender: React.Dispatch<React.SetStateAction<boolean>>;
+  setChallengeData: React.Dispatch<
+    React.SetStateAction<GetChallengeResponse | undefined>
+  >;
 }
 
 const ChallengeListItem = ({
@@ -20,7 +22,7 @@ const ChallengeListItem = ({
   userName,
   rowData,
   isMine,
-  setReRender,
+  setChallengeData,
 }: ListItemProps) => {
   const navbar = useRecoilValue(sidebarState);
   const [challengeModal, setChallengeModal] = useState(false);
@@ -36,7 +38,7 @@ const ChallengeListItem = ({
           challengeName={challengeName}
           setChallengeModal={setChallengeModal}
           challengeApply={PostChallenge}
-          setReRender={setReRender}
+          setChallengeData={setChallengeData}
         />
       )}
       <ChallengeListBox>
