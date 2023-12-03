@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import { sidebarState } from '../store/atoms/Sidebar/state';
-import { Challenge } from '../type/GetChallengePayload';
+import { Challenge, GetChallengeResponse } from '../type/GetChallengePayload';
 import ChallengeListItem from './ChallengeListItem';
 
 interface ListProps {
@@ -11,7 +11,9 @@ interface ListProps {
   listData: Challenge[];
   isMine?: boolean;
   userName?: string;
-  setReRender: React.Dispatch<React.SetStateAction<boolean>>;
+  setChallengeData: React.Dispatch<
+    React.SetStateAction<GetChallengeResponse | undefined>
+  >;
 }
 
 const ChallengeList = ({
@@ -21,7 +23,7 @@ const ChallengeList = ({
   status,
   listData,
   isMine,
-  setReRender,
+  setChallengeData,
 }: ListProps) => {
   const navbar = useRecoilValue(sidebarState);
 
@@ -39,7 +41,7 @@ const ChallengeList = ({
           key={index}
           rowData={item}
           isMine={isMine}
-          setReRender={setReRender}
+          setChallengeData={setChallengeData}
         />
       ))}
     </ChallengeListContainer>
