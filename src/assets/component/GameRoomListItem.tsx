@@ -1,48 +1,38 @@
 import styled from 'styled-components';
-import { ListData } from './List';
 import SmallButton from './SmallButton';
 import { useRecoilValue } from 'recoil';
 import { sidebarState } from '../store/atoms/Sidebar/state';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GameRoom } from '../type/GetRoomListPayload';
+import { ReactComponent as Lock } from '../images/room-lock.svg';
 
 interface ListItemProps {
-  isMine?: boolean;
-  rowData: ListData;
-  buttonType: 'toggle' | 'navigate';
+  rowData: GameRoom;
 }
 
-const ListItem = ({ rowData, buttonType, isMine }: ListItemProps) => {
+const ListItem = ({ rowData }: ListItemProps) => {
   const navbar = useRecoilValue(sidebarState);
   const navigate = useNavigate();
-  const [isParticipated, setIsParticipated] = useState(rowData.status ?? false);
-  const toggleButton = () => {
-    setIsParticipated((prev) => !prev);
-  };
   const handleNavigate = () => navigate('/game');
 
   return (
-    <ListBox key={rowData.id}>
-      <ListTitle navbar={navbar}>{rowData.firstContent}</ListTitle>
-      <ListSecondTitle>{rowData.secondContent}</ListSecondTitle>
-      <ListThirdTitle>{rowData.thirdContent}</ListThirdTitle>
-      {isMine && (
-        <>
-          {isParticipated ? (
-            <ParticipateText>참여중</ParticipateText>
-          ) : (
-            <SmallButton
-              text={buttonType === 'toggle' ? '참여하기' : '참가하기'}
-              onClick={buttonType === 'toggle' ? toggleButton : handleNavigate}
-            />
-          )}
-        </>
-      )}
+    <ListBox>
+      {rowData.hasPassword && <LockIcon />}
+      <ListTitle navbar={navbar}>{rowData.title}</ListTitle>
+      <ListRoomMaker>{rowData.managerName}</ListRoomMaker>
+      <ListCount>{rowData.memberLimit}</ListCount>
+      <SmallButton text="참가하기" onClick={handleNavigate} />
     </ListBox>
   );
 };
 
 export default ListItem;
+
+const LockIcon = styled(Lock)`
+  position: absolute;
+  top: 10px;
+  left: 50px;
+`;
 
 const ListTitle = styled.div<{ navbar: boolean }>`
   width: ${(props) => (props.navbar ? '350px' : '500px')};
@@ -51,14 +41,14 @@ const ListTitle = styled.div<{ navbar: boolean }>`
   align-items: center;
 `;
 
-const ListSecondTitle = styled.div`
+const ListRoomMaker = styled.div`
   width: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const ListThirdTitle = styled.div`
+const ListCount = styled.div`
   width: 200px;
   display: flex;
   justify-content: center;
@@ -67,6 +57,7 @@ const ListThirdTitle = styled.div`
 `;
 
 const ListBox = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
