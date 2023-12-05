@@ -15,6 +15,7 @@ import {
   GetChallengeResponse,
 } from '../type/GetChallengePayload';
 import ChallengeList from '../component/ChallengeList';
+import BadgeModal from '../modal/BadgeModal';
 
 const Dashboard = () => {
   const { userName } = useParams();
@@ -26,6 +27,7 @@ const Dashboard = () => {
     'PUSH_UP',
   );
   const [challengeData, setChallengeData] = useState<GetChallengeResponse>();
+  const [badgeBoard, setBadgeBoard] = useState(false);
 
   useEffect(() => {
     GetDashboard({ userName, handleDashboardData, handleDashboardError });
@@ -61,6 +63,12 @@ const Dashboard = () => {
 
   return (
     <>
+      {badgeBoard && dashboardRes && (
+        <BadgeModal
+          setBadgeBoard={setBadgeBoard}
+          badgeState={dashboardRes.badgeResponse.badges}
+        />
+      )}
       {dashboardRes && (
         <DashboardContainer>
           <DashboardHeader>
@@ -68,12 +76,14 @@ const Dashboard = () => {
           </DashboardHeader>
           <DashboardLayout>
             <DashboardBoxContainer>
-              <DashboardBox
-                title="보유 뱃지"
-                img={badge}
-                content={`${dashboardRes.badgeResponse.badgeCount}개`}
-                desc={`${dashboardRes.badgeResponse.badgePercent}% 달성`}
-              />
+              <button onClick={() => setBadgeBoard(true)}>
+                <DashboardBox
+                  title="보유 뱃지"
+                  img={badge}
+                  content={`${dashboardRes.badgeResponse.badgeCount}개`}
+                  desc={`${dashboardRes.badgeResponse.badgePercent}% 달성`}
+                />
+              </button>
 
               {dashboardRes.bestRecords.map((item, index) => (
                 <DashboardBox

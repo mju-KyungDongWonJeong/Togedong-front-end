@@ -31,10 +31,12 @@ const DashboardBoxContainer = styled.div`
   padding: 20px 15px;
   display: flex;
   flex-direction: column;
+  align-items: baseline;
 `;
 
 const DashboardBoxHeader = styled.div`
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
