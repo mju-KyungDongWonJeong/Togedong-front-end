@@ -8,6 +8,7 @@ export interface DashboardResponse {
 interface BadgeResponse {
   badgeCount: number;
   badgePercent: number;
+  badges: ('PUSH_UP_BADGE' | 'SQUAT_BADGE')[];
 }
 
 export interface DashboardError {
