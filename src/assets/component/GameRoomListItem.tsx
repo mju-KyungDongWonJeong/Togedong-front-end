@@ -13,7 +13,7 @@ interface ListItemProps {
 const ListItem = ({ rowData }: ListItemProps) => {
   const navbar = useRecoilValue(sidebarState);
   const navigate = useNavigate();
-  const handleNavigate = () => navigate('/game');
+  const handleNavigate = () => navigate('/gameroom');
 
   return (
     <ListBox>

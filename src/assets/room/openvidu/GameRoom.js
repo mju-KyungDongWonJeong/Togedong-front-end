@@ -2,20 +2,29 @@ import { OpenVidu } from 'openvidu-browser';
 import { useRef, useEffect, useState, useCallback } from 'react';
 import '@tensorflow/tfjs-backend-webgl';
 import UserVideoComponent from './UserVideoComponent';
-import axios from 'axios';
+// import axios from 'axios';
+import { useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 
 // https://togedong.kro.kr/
 
 // const APPLICATION_SERVER_URL =
 // process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'http://togedong.kro.kr/';
+// const APPLICATION_SERVER_URL =
+// process.env.NODE_ENV === 'production' ? '' : 'https://togedong.kro.kr/';
 
 export default function GameRoom() {
-  const [mySessionId, setMySessionId] = useState('');
-  const [myUserName, setMyUserName] = useState('username');
-  const [session, setSession] = useState(undefined);
+  const location = useLocation();
+  const roomTitle = location.state.roomTitle;
+  const myName = location.state.roomManager;
+  const sessionId = location.state.roomId;
+  const myToken = location.state.connectionToken;
+
+  console.log(myToken);
+  const [mySessionId, setMySessionId] = useState(roomTitle);
+  const [myUserName, setMyUserName] = useState(myName);
+  const [session, setSession] = useState(sessionId);
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
@@ -23,13 +32,13 @@ export default function GameRoom() {
 
   const OV = useRef(new OpenVidu());
 
-  const handleChangeSessionId = useCallback((e) => {
-    setMySessionId(e.target.value);
-  }, []);
+  // const handleChangeSessionId = useCallback((e) => {
+  //   setMySessionId(e.target.value);
+  // }, []);
 
-  const handleChangeUserName = useCallback((e) => {
-    setMyUserName(e.target.value);
-  }, []);
+  // const handleChangeUserName = useCallback((e) => {
+  //   setMyUserName(e.target.value);
+  // }, []);
 
   const handleMainVideoStream = useCallback(
     (stream) => {
@@ -40,7 +49,11 @@ export default function GameRoom() {
     [mainStreamManager],
   );
 
-  const joinSession = useCallback(() => {
+  useEffect(() => {
+    joinSession(); // 컴포넌트가 마운트되면 joinSession 함수를 호출합니다.
+  }, []);
+
+  const joinSession = useCallback(async () => {
     const mySession = OV.current.initSession();
 
     mySession.on('streamCreated', (event) => {
@@ -55,16 +68,70 @@ export default function GameRoom() {
     mySession.on('exception', (exception) => {
       console.warn(exception);
     });
+    try {
+      await mySession.connect(myToken, { clientData: myName });
+      setSession(mySession);
+    } catch (error) {
+      console.log('There was an error connecting to the session:', error);
+    }
+  }, [myToken, myName]);
 
-    setSession(mySession);
-  }, []);
+  // useEffect(() => {
+  //   if (session) {
+  //     // Get a token from the OpenVidu deployment
+  //     getToken().then(async (token) => {
+  //       try {
+  //         await session.connect(token, { clientData: myUserName });
+
+  //         let publisher = await OV.current.initPublisherAsync(undefined, {
+  //           audioSource: undefined,
+  //           videoSource: undefined,
+  //           publishAudio: true,
+  //           publishVideo: true,
+  //           resolution: '640x480',
+  //           frameRate: 30,
+  //           insertMode: 'APPEND',
+  //           mirror: false,
+  //         });
+
+  //         session.publish(publisher);
+
+  //         const devices = await OV.current.getDevices();
+  //         const videoDevices = devices.filter(
+  //           (device) => device.kind === 'videoinput',
+  //         );
+  //         const currentVideoDeviceId = publisher.stream
+  //           .getMediaStream()
+  //           .getVideoTracks()[0]
+  //           .getSettings().deviceId;
+  //         const currentVideoDevice = videoDevices.find(
+  //           (device) => device.deviceId === currentVideoDeviceId,
+  //         );
+
+  //         setMainStreamManager(publisher);
+  //         setPublisher(publisher);
+  //         setCurrentVideoDevice(currentVideoDevice);
+  //       } catch (error) {
+  //         console.log(
+  //           'There was an error connecting to the session:',
+  //           error.code,
+  //           error.message,
+  //         );
+  //       }
+  //     });
+  //   }
+  // }, [session, myUserName]);
+  // const url = new URL(myToken);
+  // const params = new URLSearchParams(url.search);
+  // const token = params.get('token');
 
   useEffect(() => {
-    if (session) {
-      // Get a token from the OpenVidu deployment
-      getToken().then(async (token) => {
+    const connectToSession = async () => {
+      if (session) {
+        // 이미 있는 토큰 사용
+        console.log(session);
         try {
-          await session.connect(token, { clientData: myUserName });
+          await session.connect(myToken, { clientData: myUserName });
 
           let publisher = await OV.current.initPublisherAsync(undefined, {
             audioSource: undefined,
@@ -101,8 +168,9 @@ export default function GameRoom() {
             error.message,
           );
         }
-      });
-    }
+      }
+    };
+    connectToSession();
   }, [session, myUserName]);
 
   const leaveSession = useCallback(() => {
@@ -222,45 +290,9 @@ export default function GameRoom() {
   //   return response.data; // The token
   // };
 
-  // 내 코드
-
-  const test_data = {
-    title: 'test',
-    memberLimit: 2,
-    exerciseName: 'PUSH_UP',
-    hasPassword: false,
-    password: '1234',
-  };
-
-  const getToken = useCallback(async () => {
-    return createSession(mySessionId).then((roomId) => createToken(roomId));
-  }, [mySessionId]);
-
-  const createSession = async () => {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + 'api/room',
-      test_data,
-      {
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
-    return response.data.roomId; // The sessionId
-  };
-
-  const createToken = async (roomId) => {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + 'api/room/' + roomId + '/connections',
-      {},
-      {
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
-    return response.data; // The token
-  };
-
   return (
-    <div className="container">
-      {session === undefined ? (
+    <Container>
+      {/* {session === undefined ? (
         <div id="join">
           <div id="img-div">
             <img
@@ -304,26 +336,13 @@ export default function GameRoom() {
             </form>
           </div>
         </div>
-      ) : null}
+      ) : null} */}
 
       {session !== undefined ? (
         <div id="session">
           <div id="session-header">
-            <h1 id="session-title">{mySessionId}</h1>
-            <input
-              className="btn btn-large btn-danger"
-              type="button"
-              id="buttonLeaveSession"
-              onClick={leaveSession}
-              value="Leave session"
-            />
-            <input
-              className="btn btn-large btn-success"
-              type="button"
-              id="buttonSwitchCamera"
-              onClick={switchCamera}
-              value="Switch Camera"
-            />
+            <RoomTitle>{mySessionId}</RoomTitle>
+            <input type="button" onClick={leaveSession} value="방 나가기" />
           </div>
 
           {mainStreamManager !== undefined ? (
@@ -353,6 +372,12 @@ export default function GameRoom() {
           </div>
         </div>
       ) : null}
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div``;
+
+const RoomTitle = styled.h1`
+  font-size: 300px;
+`;
