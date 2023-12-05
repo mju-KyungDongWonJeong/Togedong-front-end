@@ -7,26 +7,45 @@ import Input from '../../component/Input';
 import LargeButton from '../../component/LargeButton';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { validation } from './Validation';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { PostLogin } from '../../../api/\bauth/Login';
+import { LoginError, LoginResponse } from '../../type/PostLoginPayload';
 
-type FormValues = {
-  id: string;
+export interface LoginInputs {
+  userId: string;
   password: string;
-};
+}
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<LoginInputs>({
     resolver: yupResolver(validation),
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
   });
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<LoginInputs> = (data) => {
+    PostLogin({ data, callbackFunction, handleError });
+  };
+
+  const callbackFunction = (data: LoginResponse) => {
+    alert(data.message);
+    localStorage.setItem('accessToken', data.data.accessToken);
+    localStorage.setItem('userName', data.data.userName);
+    navigate(`/dashboard/${data.data.userName}`);
+  };
+
+  const handleError = (error: LoginError) => {
+    if (error.validation) {
+      alert(error.validation[0].message);
+    } else if (error.status == 404) {
+      alert(error.cause);
+    }
   };
 
   return (
@@ -45,12 +64,14 @@ const Login = () => {
               <Input
                 imgSrc={User}
                 placeholder="아이디를 입력해주세요"
-                type="id"
+                type="userId"
                 register={register}
                 required
-                name="id"
+                name="userId"
               />
-              {errors.id && <LoginError>{errors.id.message}</LoginError>}
+              {errors.userId && (
+                <LoginErrorContent>{errors.userId.message}</LoginErrorContent>
+              )}
             </InputBox>
             <InputBox>
               <Input
@@ -62,7 +83,7 @@ const Login = () => {
                 name="password"
               />
               {errors.password && (
-                <LoginError>{errors.password.message}</LoginError>
+                <LoginErrorContent>{errors.password.message}</LoginErrorContent>
               )}
             </InputBox>
             <LinkContainer>
@@ -153,7 +174,7 @@ const LinkSignup = styled(Link)`
   color: ${({ theme }) => theme.colors.ORANGE1};
 `;
 
-const LoginError = styled.div`
+const LoginErrorContent = styled.div`
   display: flex;
   width: 100%;
   align-items: baseline;

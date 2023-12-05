@@ -9,13 +9,18 @@ import LargeButton from '../../component/LargeButton';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { validation } from './Validation';
 
-type SignupInputs = {
-  id: string;
+import { SignupError, SignupResponse } from '../../type/PostSignupPayload';
+import { PostSignup } from '../../../api/\bauth/Signup';
+import { useNavigate } from 'react-router-dom';
+
+export interface SignupInputs {
+  userId: string;
   password: string;
   userName: string;
-};
+}
 
 const Signup = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -27,7 +32,20 @@ const Signup = () => {
   });
 
   const onSubmit: SubmitHandler<SignupInputs> = (data) => {
-    console.log(data);
+    PostSignup({ data, callbackFunction, handleError });
+  };
+
+  const callbackFunction = (data: SignupResponse) => {
+    alert(data.message);
+    navigate('/login');
+  };
+
+  const handleError = (error: SignupError) => {
+    if (error.validation) {
+      alert(error.validation[0].message);
+    } else if (error.status == 409) {
+      alert(error.cause);
+    }
   };
 
   return (
@@ -52,19 +70,23 @@ const Signup = () => {
                 required
               />
               {errors.userName && (
-                <SignupError>{errors.userName.message}</SignupError>
+                <SignupErrorContent>
+                  {errors.userName.message}
+                </SignupErrorContent>
               )}
             </InputBox>
             <InputBox>
               <Input
                 imgSrc={User}
                 placeholder="아이디를 입력해주세요"
-                type="id"
+                type="userId"
                 register={register}
-                name="id"
+                name="userId"
                 required
               />
-              {errors.id && <SignupError>{errors.id.message}</SignupError>}
+              {errors.userId && (
+                <SignupErrorContent>{errors.userId.message}</SignupErrorContent>
+              )}
             </InputBox>
             <InputBox>
               <Input
@@ -76,7 +98,9 @@ const Signup = () => {
                 required
               />
               {errors.password && (
-                <SignupError>{errors.password.message}</SignupError>
+                <SignupErrorContent>
+                  {errors.password.message}
+                </SignupErrorContent>
               )}
             </InputBox>
             <LargeButton text="회원가입" />
@@ -150,7 +174,7 @@ const InputContainer = styled.form`
 const InputBox = styled.div`
   margin-bottom: 20px;
 `;
-const SignupError = styled.div`
+const SignupErrorContent = styled.div`
   display: flex;
   width: 100%;
   align-items: baseline;

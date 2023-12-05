@@ -3,8 +3,8 @@ export const validation = yup.object().shape({
   userName: yup
     .string()
     .required('닉네임을 다시입력해주세요')
-    .matches(/^(?=.*[a-zA-Z0-9]).{2,10}$/, '닉네임을 다시입력해주세요'),
-  id: yup
+    .matches(/^[가-힣a-zA-Z0-9]{2,10}$/, '닉네임을 다시입력해주세요'),
+  userId: yup
     .string()
     .required('아이디를 다시입력해주세요')
     .matches(/^(?=.*[a-zA-Z0-9]).{2,10}$/, '아이디를 다시입력해주세요'),

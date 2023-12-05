@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 export const validation = yup.object().shape({
-  id: yup
+  userId: yup
     .string()
     .required('아이디를 다시입력해주세요')
     .matches(/^(?=.*[a-zA-Z0-9]).{2,10}$/, '아이디를 다시입력해주세요'),

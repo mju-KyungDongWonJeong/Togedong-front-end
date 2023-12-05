@@ -7,6 +7,7 @@ import Signup from './assets/pages/Signup/Signup';
 import PushUpGameGuide from './assets/modal/PushUpGameGuide';
 import SquatGameGuide from './assets/modal/SquatGameGuide';
 import Dashboard from './assets/pages/Dashboard';
+import GameList from './assets/pages/GameList';
 import MainHeader from './assets/component/MainHeader';
 
 import GameRoom from './assets/pages/Game/GameRoom';
@@ -18,9 +19,8 @@ function App() {
         <Frame>
           <Routes>
             <Route element={<MainHeader />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/" element={<GameRoom />} />
-              <Route path="/game" />
+              <Route path="/dashboard/:userName" element={<Dashboard />} />
+              <Route path="/gamelist" element={<GameList />} />
               <Route path="/setting" />
             </Route>
             <Route path="/login" element={<Login />} />

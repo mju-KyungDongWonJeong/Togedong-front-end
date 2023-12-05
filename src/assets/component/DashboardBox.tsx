@@ -3,8 +3,8 @@ import styled from 'styled-components';
 interface DashboardBoxProps {
   title: string;
   img: string;
-  content: string;
-  desc: string;
+  content: string | number;
+  desc?: string;
 }
 
 const DashboardBox = ({ title, img, content, desc }: DashboardBoxProps) => {

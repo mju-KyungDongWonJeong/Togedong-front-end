@@ -3,149 +3,158 @@ import DashboardBox from '../component/DashboardBox';
 import badge from '../images/badge.svg';
 import record from '../images/record.svg';
 import SmallButton from '../component/SmallButton';
-import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { sidebarState } from '../store/atoms/Sidebar/state';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { GetDashboard } from '../../api/GetDashboard';
+import { DashboardError, DashboardResponse } from '../type/GetDashboardPayload';
+import { GetRank } from '../../api/GetRank';
+import { GetRankError, GetRankPayload } from '../type/GetRankPayload';
+import { GetChallenge } from '../../api/GetChallenge';
+import {
+  ChallengeError,
+  GetChallengeResponse,
+} from '../type/GetChallengePayload';
+import ChallengeList from '../component/ChallengeList';
 
 const Dashboard = () => {
-  const [contentView, setContentView] = useState({
-    rank: false,
-    challenge: true,
-  });
-  const [rankExercise, setRankExercise] = useState({
-    pushup: true,
-    squat: false,
-  });
+  const { userName } = useParams();
+  const navigate = useNavigate();
+  const [dashboardRes, setDashboardRes] = useState<DashboardResponse>();
+  const [rankRes, setRankRes] = useState<GetRankPayload>();
+  const [contentView, setContentView] = useState('challenge');
+  const [rankExercise, setRankExercise] = useState<'PUSH_UP' | 'SQUAT'>(
+    'PUSH_UP',
+  );
+  const [challengeData, setChallengeData] = useState<GetChallengeResponse>();
 
-  const [status, setStatus] = useState(false);
-  const navbar = useRecoilValue(sidebarState);
-  const dashboardBox = [
-    {
-      title: '보유 뱃지',
-      img: badge,
-      content: '5개',
-      desc: '35%달성',
-    },
-    {
-      title: '최고기록',
-      img: record,
-      content: '26개',
-      desc: '스쿼트',
-    },
-    {
-      title: '최고기록',
-      img: record,
-      content: '26개',
-      desc: '푸쉬업',
-    },
-  ];
+  useEffect(() => {
+    GetDashboard({ userName, handleDashboardData, handleDashboardError });
+  }, [userName]);
 
-  const RANKDATA = [
-    {
-      rank: '1등',
-      name: '김정호',
-      count: '75개',
-    },
-    {
-      rank: '2등',
-      name: '전석민',
-      count: '25개',
-    },
-    {
-      rank: '3등',
-      name: '난돌민',
-      count: '1개',
-    },
-  ];
+  useEffect(() => {
+    GetChallenge({ userName, handleChallengeData, handleBoardError });
+  }, [userName]);
 
-  const handleParticipate = () => {
-    setStatus(true);
+  const handleDashboardData = (data: DashboardResponse) => {
+    setDashboardRes(data);
+  };
+  const handleDashboardError = (error: DashboardError) => {
+    alert(error.cause);
+    navigate(`/dashboard/${localStorage.getItem('userName')}`);
+  };
+
+  const handleRankExercise = (exerciseName: 'PUSH_UP' | 'SQUAT') => {
+    GetRank({ exerciseName, handleRankData, handleBoardError });
+  };
+
+  const handleRankData = (data: GetRankPayload) => {
+    setRankRes(data);
+  };
+
+  const handleBoardError = (error: GetRankError | ChallengeError) => {
+    alert(error.cause);
+  };
+
+  const handleChallengeData = (data: GetChallengeResponse) => {
+    setChallengeData(data);
   };
 
   return (
-    <DashboardContainer>
-      <DashboardHeader>
-        <HeaderContent>김정호님 환영해요!</HeaderContent>
-      </DashboardHeader>
-      <DashboardLayout>
-        <DashboardBoxContainer>
-          {dashboardBox.map((item, index) => (
-            <DashboardBox
-              title={item.title}
-              img={item.img}
-              content={item.content}
-              desc={item.desc}
-              key={index}
-            />
-          ))}
-        </DashboardBoxContainer>
-        <ButtonContainer>
-          <SmallButton
-            text="첼린지"
-            onClick={() => setContentView({ rank: false, challenge: true })}
-          />
-          <SmallButton
-            text="랭킹"
-            onClick={() => setContentView({ rank: true, challenge: false })}
-          />
-        </ButtonContainer>
-        {contentView.challenge && (
-          <ContentContainer>
-            <ContentHeader>
-              <ChallengeTitle navbar={navbar}>첼린지</ChallengeTitle>
-              <ChallengeCount>참여자 수</ChallengeCount>
-              <ChallengeStatus>달성현황</ChallengeStatus>
-            </ContentHeader>
-            <ContentBox>
-              <ChallengeTitle navbar={navbar}>
-                팔굽 10일동안 100개씩
-              </ChallengeTitle>
-              <ChallengeCount>124</ChallengeCount>
-              <ChallengeStatus>15%</ChallengeStatus>
-              {status ? (
-                <ParticipateText>참여중</ParticipateText>
-              ) : (
-                <SmallButton text="참여하기" onClick={handleParticipate} />
-              )}
-            </ContentBox>
-          </ContentContainer>
-        )}
-        {contentView.rank && (
-          <ContentContainer>
-            <SelectBox>
-              <SelectExercise
-                state={rankExercise.pushup}
+    <>
+      {dashboardRes && (
+        <DashboardContainer>
+          <DashboardHeader>
+            <HeaderContent>{userName}님 환영해요!</HeaderContent>
+          </DashboardHeader>
+          <DashboardLayout>
+            <DashboardBoxContainer>
+              <DashboardBox
+                title="보유 뱃지"
+                img={badge}
+                content={`${dashboardRes.badgeResponse.badgeCount}개`}
+                desc={`${dashboardRes.badgeResponse.badgePercent}% 달성`}
+              />
+
+              {dashboardRes.bestRecords.map((item, index) => (
+                <DashboardBox
+                  key={index}
+                  title="최고 기록"
+                  img={record}
+                  content={`${item.record}개`}
+                  desc={item.exerciseName}
+                />
+              ))}
+            </DashboardBoxContainer>
+
+            <ButtonContainer>
+              <SmallButton
+                text="첼린지"
+                onClick={() => setContentView('challenge')}
+              />
+              <SmallButton
+                text="랭킹"
                 onClick={() => {
-                  setRankExercise({ pushup: true, squat: false });
+                  setContentView('rank');
+                  GetRank({
+                    exerciseName: rankExercise,
+                    handleRankData,
+                    handleBoardError,
+                  });
                 }}
-              >
-                푸쉬업
-              </SelectExercise>
-              <SelectExercise
-                state={rankExercise.squat}
-                onClick={() => {
-                  setRankExercise({ pushup: false, squat: true });
-                }}
-              >
-                스쿼트
-              </SelectExercise>
-            </SelectBox>
-            <ContentHeader>
-              <Rank>등수</Rank>
-              <RankName>닉네임</RankName>
-              <RankCount>개수</RankCount>
-            </ContentHeader>
-            {RANKDATA.map((item, index) => (
-              <ContentBox key={index}>
-                <Rank>{item.rank}</Rank>
-                <RankName>{item.name}</RankName>
-                <RankCount>{item.count}</RankCount>
-              </ContentBox>
-            ))}
-          </ContentContainer>
-        )}
-      </DashboardLayout>
-    </DashboardContainer>
+              />
+            </ButtonContainer>
+            {contentView === 'challenge' && challengeData?.challenges && (
+              <ChallengeList
+                userName={userName}
+                title="첼린지"
+                count="참여자 수"
+                status="달성현황"
+                listData={challengeData.challenges}
+                isMine={challengeData.isMine}
+                setChallengeData={setChallengeData}
+              />
+            )}
+            {contentView === 'rank' && (
+              <ContentContainer>
+                <SelectBox>
+                  <SelectExercise
+                    state={rankExercise === 'PUSH_UP'}
+                    onClick={() => {
+                      setRankExercise('PUSH_UP');
+                      handleRankExercise('PUSH_UP');
+                    }}
+                  >
+                    푸쉬업
+                  </SelectExercise>
+                  <SelectExercise
+                    state={rankExercise === 'SQUAT'}
+                    onClick={() => {
+                      setRankExercise('SQUAT');
+                      handleRankExercise('SQUAT');
+                    }}
+                  >
+                    스쿼트
+                  </SelectExercise>
+                </SelectBox>
+                <ContentHeader>
+                  <Rank>등수</Rank>
+                  <RankName>닉네임</RankName>
+                  <RankCount>개수</RankCount>
+                </ContentHeader>
+                {rankRes &&
+                  rankRes.data.map((item, index) => (
+                    <ContentBox key={index}>
+                      <Rank>{index + 1}</Rank>
+                      <RankName>{item.name}</RankName>
+                      <RankCount>{item.count}</RankCount>
+                    </ContentBox>
+                  ))}
+              </ContentContainer>
+            )}
+          </DashboardLayout>
+        </DashboardContainer>
+      )}
+    </>
   );
 };
 
@@ -214,28 +223,6 @@ const ContentHeader = styled.div`
   font-weight: 500;
 `;
 
-const ChallengeTitle = styled.div<{ navbar: boolean }>`
-  width: ${(props) => (props.navbar ? '350px' : '500px')};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ChallengeCount = styled.div`
-  width: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ChallengeStatus = styled.div`
-  width: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 100px;
-`;
-
 const ContentBox = styled.div`
   display: flex;
   align-items: center;
@@ -243,13 +230,6 @@ const ContentBox = styled.div`
   height: 50px;
   color: ${({ theme }) => theme.colors.BLACK};
   font-size: 15px;
-`;
-
-const ParticipateText = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 94px;
 `;
 
 const SelectBox = styled.div`
