@@ -1,13 +1,20 @@
 import styled from 'styled-components';
+import Body from '../images/Pose-all.jpg';
+import WrongBody from '../images/Pose-wrong.jpg';
 
 const SecondPushUp = () => {
   return (
     <Container>
       <CameraGuideContainer>
-        <FirstCameraGuide></FirstCameraGuide>
-        <CrossShape />
+        <FirstCameraGuide>
+          <Pose src={Body} alt="전신" />
+        </FirstCameraGuide>
+        <CrossShape>
+          <Pose src={WrongBody} alt="잘못된 예시" />
+        </CrossShape>
       </CameraGuideContainer>
       <Text>반드시 전신이 카메라에 비치도록 해주세요.</Text>
+      <Text>타이머는 5초 뒤에 시작됩니다.</Text>
     </Container>
   );
 };
@@ -35,27 +42,37 @@ const Text = styled.p`
 const FirstCameraGuide = styled.div`
   width: 300px;
   height: 350px;
-  border: 1px solid ${({ theme }) => theme.colors.BLACK};
 `;
 
 const CrossShape = styled.div`
   width: 300px;
   height: 350px;
   position: relative;
-  border: 1px solid ${({ theme }) => theme.colors.BLACK};
 
-  &::before,
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    background: red;
+    transform: rotate(45deg);
+    top: calc(50% - 1px);
+    z-index: 1; // 추가된 부분
+  }
   &::after {
     content: '';
     position: absolute;
     width: 100%;
-    height: 1px;
-    background: ${({ theme }) => theme.colors.BLACK};
-    transform: rotate(45deg);
+    height: 5px;
+    background: red;
+    transform: rotate(135deg);
     top: calc(50% - 1px);
+    right: 0;
+    z-index: 1; // 추가된 부분
   }
+`;
 
-  &::after {
-    transform: rotate(-45deg);
-  }
+const Pose = styled.img`
+  width: 300px;
+  height: 350px;
 `;

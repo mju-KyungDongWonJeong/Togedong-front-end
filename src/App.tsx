@@ -9,7 +9,6 @@ import SquatGameGuide from './assets/modal/SquatGameGuide';
 import Dashboard from './assets/pages/Dashboard';
 import GameList from './assets/pages/GameList';
 import MainHeader from './assets/component/MainHeader';
-
 import GameRoom from './assets/pages/Game/GameRoom';
 
 function App() {
@@ -23,6 +22,7 @@ function App() {
               <Route path="/gamelist" element={<GameList />} />
               <Route path="/setting" />
             </Route>
+            <Route path="/gameroom/:exerciseName" element={<GameRoom />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/pushupguide" element={<PushUpGameGuide />} />

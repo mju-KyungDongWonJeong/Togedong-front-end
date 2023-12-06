@@ -56,7 +56,7 @@ const ChallengeApply = ({
         <ChallengeHeader>
           <LogoImg as={Logo} />
         </ChallengeHeader>
-        <ChallengeContent>첼린지를 참여 하시겠습니까?</ChallengeContent>
+        <ChallengeContent>챌린지를 참여 하시겠습니까?</ChallengeContent>
         <ChallengeBtnContainer>
           <ChallengeBtn onClick={handleAgree}>예</ChallengeBtn>
           <ChallengeBtn onClick={handleDisAgree}>아니요</ChallengeBtn>

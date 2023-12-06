@@ -16,7 +16,7 @@ const COMPONENT_DATA = [
 ];
 
 const PushUpGameGuide = () => {
-  const [showGuide, setShowGuide] = useState<string>('first');
+  const [showGuide, setShowGuide] = useState<string | null>('first');
 
   const handlePrevGuide = () => {
     setShowGuide('first');
@@ -27,7 +27,7 @@ const PushUpGameGuide = () => {
   };
 
   const handleExit = () => {
-    console.log('exit');
+    setShowGuide(null);
   };
 
   const selectComponent: { [key: string]: JSX.Element } = {
@@ -36,47 +36,52 @@ const PushUpGameGuide = () => {
   };
 
   return (
-    <Container>
-      <TitleContainer>
-        <Title>푸쉬업 게임안내</Title>
-        {showGuide === 'second' && (
-          <ExitButton onClick={handleExit} src={Cancel} alt="X 버튼" />
-        )}
-      </TitleContainer>
-      <CameraContainer>
-        {COMPONENT_DATA.map((item) => {
-          return showGuide !== 'second' ? (
-            <NextButton
-              onClick={handleNextGuide}
-              name={item.name}
-              key={item.id}
-            >
-              {'>'}
-            </NextButton>
-          ) : (
-            <PrevButton
-              onClick={handlePrevGuide}
-              name={item.name}
-              key={item.id}
-            >
-              {'<'}
-            </PrevButton>
-          );
-        })}
-        {selectComponent[showGuide]}
-      </CameraContainer>
-    </Container>
+    showGuide !== null && (
+      <Container>
+        <TitleContainer>
+          <Title>푸쉬업 게임안내</Title>
+          {showGuide === 'second' && (
+            <ExitButton onClick={handleExit} src={Cancel} alt="X 버튼" />
+          )}
+        </TitleContainer>
+
+        <CameraContainer>
+          {COMPONENT_DATA.map((item) => {
+            return showGuide !== 'second' ? (
+              <NextButton
+                onClick={handleNextGuide}
+                name={item.name}
+                key={item.id}
+              >
+                {'>'}
+              </NextButton>
+            ) : (
+              <PrevButton
+                onClick={handlePrevGuide}
+                name={item.name}
+                key={item.id}
+              >
+                {'<'}
+              </PrevButton>
+            );
+          })}
+          {selectComponent[showGuide]}
+        </CameraContainer>
+      </Container>
+    )
   );
 };
 
 export default PushUpGameGuide;
 
 const Container = styled.div`
+  z-index: 100;
   display: flex;
   width: 100%;
   height: 700px;
   flex-direction: column;
   align-items: center;
+  background-color: white;
 `;
 
 const TitleContainer = styled.div`
