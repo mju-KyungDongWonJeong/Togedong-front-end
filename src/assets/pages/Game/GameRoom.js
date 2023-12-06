@@ -10,15 +10,24 @@ import SquatGameGuide from '../../modal/SquatGameGuide';
 import PushUpGameGuide from '../../modal/PushUpGameGuide';
 import exitImage from '../../images/logout.svg';
 
+await tf.ready();
+let detector = await poseDetection.createDetector(
+  poseDetection.SupportedModels.BlazePose,
+  {
+    runtime: 'tfjs',
+    modelType: 'full',
+  },
+);
+const ws = new WebSocket(`ws://3.36.69.175:8000/count_squat`);
+
 const GameRoom = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const type = location.pathname.includes('PUSH')
-    ? 'count_pushups'
-    : 'count_squat';
-
-  const ws = new WebSocket(`ws://3.36.69.175:8000/${type}`);
+  const type = 'testws';
+  // const type = location.pathname.includes('PUSH')
+  //   ? 'count_pushups'
+  //   : 'count_squat';
+  // const ws = new WebSocket(`ws://3.36.69.175:8000/${type}`);
 
   const [gameStart, setGameStart] = useState(false); // 게임 시작 여부
   const [count, setCount] = useState(0); // 운동 개수
@@ -30,45 +39,52 @@ const GameRoom = () => {
 
   const GameTimer = () => {
     useEffect(() => {
-      const timeoutId = setTimeout(() => {
-        const intervalId = setInterval(() => {
-          setGameTimer((timer) => timer - 1);
-        }, 1000);
+      const intervalId = setInterval(() => {
+        setGameTimer((timer) => {
+          if (timer <= 1) {
+            clearInterval(intervalId);
+            return 0;
+          } else {
+            return timer - 1;
+          }
+        });
+      }, 1000);
 
-        return () => clearInterval(intervalId);
-      }, 5000);
-
-      return () => clearTimeout(timeoutId);
-    }, [setGameTimer]);
+      return () => clearInterval(intervalId);
+    }, []);
 
     return <h1>{gameTimer}</h1>;
   };
 
   const handleExit = () => {
     ws.close();
+    detector.dispose();
+    detector = null;
     navigate('/gamelist');
   };
 
   const webcamRef = useRef(null);
 
+  // const detector = await poseDetection.createDetector(
+  // const detector =  poseDetection.createDetector(
+  //   poseDetection.SupportedModels.BlazePose,
+  //   {
+  //     runtime: 'tfjs',
+  //     modelType: 'full',
+  //   },
+  // );
+
   const runBlazePose = async () => {
     // blasepose모델 감지
-    const detector = await poseDetection.createDetector(
-      poseDetection.SupportedModels.BlazePose,
-      {
-        runtime: 'tfjs',
-        modelType: 'full',
-      },
-    );
 
     setInterval(() => {
       detect(detector);
-    }, 500);
+    }, 200);
   };
 
   useEffect(() => {
     const initializeTensorflow = async () => {
-      await tf.ready();
+      // await tf.ready();
       runBlazePose();
     };
 
@@ -92,17 +108,23 @@ const GameRoom = () => {
 
       if (
         gameStart &&
-        pose[0].keypoints3D.filter((item) => item.score < 0.65).length < 10
+        pose[0]?.keypoints3D.filter((item) => item.score < 0.27).length < 10 &&
+        gameTimer <= 59
       ) {
         // 포즈가 있고, 측정 시작을 눌렀을 때 시작
-        setTimeout(() => ws.send(JSON.stringify(pose[0].keypoints3D)), 5000);
+        // ws.onopen = () => {
+        // alert('소켓 열림');
+        ws.send(JSON.stringify(pose[0].keypoints3D));
+
+        // console.log(pose[0]);
+        // };
       }
+      // }, 5000);
     }
 
     // setInterval(() => setCount((prev) => prev + 1), 3000);
     ws.onmessage = function (event) {
       // ml서버로부터 데이터 수신
-      console.log('count : ', event.data);
       setCount(event.data);
     };
   };
@@ -131,8 +153,8 @@ const GameRoom = () => {
             position: 'absolute',
             marginLeft: 'auto',
             marginRight: 'auto',
-            width: '600px',
-            height: '500px',
+            width: '700px',
+            height: '600px',
             top: 150,
             left: 0,
             right: 0,
