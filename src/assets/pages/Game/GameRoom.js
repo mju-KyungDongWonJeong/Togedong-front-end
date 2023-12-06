@@ -90,7 +90,10 @@ const GameRoom = () => {
 
       const pose = await net.estimatePoses(video); // 포즈 추출
 
-      if (pose[0] && gameStart) {
+      if (
+        gameStart &&
+        pose[0].keypoints3D.filter((item) => item.score < 0.65).length < 10
+      ) {
         // 포즈가 있고, 측정 시작을 눌렀을 때 시작
         setTimeout(() => ws.send(JSON.stringify(pose[0].keypoints3D)), 5000);
       }
