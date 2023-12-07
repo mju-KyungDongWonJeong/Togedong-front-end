@@ -5,6 +5,14 @@ import { ReactComponent as Cancle } from '../images/cancel.svg';
 import ExerciseImg from '../component/ExerciseImg';
 import SmallButton from '../component/SmallButton';
 import { useState } from 'react';
+import axios from 'axios';
+import { OpenVidu } from 'openvidu-browser';
+import { useNavigate } from 'react-router-dom';
+
+// https://togedong.kro.kr/
+
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? '' : 'http://togedong.kro.kr:8080/';
 
 type ExerciseState = {
   PUSHUP: boolean;
@@ -24,12 +32,14 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
     PUSHUP: true,
     SQUAT: false,
   });
+  const navigate = useNavigate();
+  // const [mySessionId, setMySessionId] = useState('');
   const [passwordBox, setPasswordBox] = useState<boolean>(false);
   const [title, setTitle] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [countPerson, setCountPerson] = useState<string>('1');
-  const handleCreate = () => {};
-  const handleCancle = () => {
+
+  const handleCancel = () => {
     setIsOpen(false);
   };
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +57,52 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
   const selectPerson = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCountPerson(e.target.value);
   };
+
+  const handleCreateRoom = async () => {
+    const response = await createSession();
+    // console.log(response);
+    navigate(`/gameroom/${response.data.roomId}`, { state: response.data });
+    // navigate(`/gameroom/ses_RADpetuUKV` /**{ state: response.data }*/);
+    // navigate(`/gameroom`);
+  };
+
+  const test_data = {
+    title: title, // 방제목
+    memberLimit: Number(countPerson), // 사람 수
+    exerciseName: 'PUSH_UP', // 운동 이름
+    hasPassword: passwordBox, // 비밀번호 여부
+    password: password, // 비밀번호
+  };
+
+  // const getToken = useCallback(async () => {
+  //   return createSession().then((roomId) => createToken(roomId));
+  // }, [mySessionId]); // 방 들어갈 때
+
+  const createSession = async () => {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + 'api/room',
+      test_data,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      },
+    );
+    return response.data; // The sessionId
+  };
+
+  // const createToken = async (roomId: string) => {
+  //   const response = await axios.post(
+  //     // APPLICATION_SERVER_URL + 'api/room/' + roomId + '/connections',
+  //     APPLICATION_SERVER_URL + 'api/room/' + roomId,
+  //     {},
+  //     {
+  //       headers: { 'Content-Type': 'application/json' },
+  //     },
+  //   );
+  //   return response.data; // The token
+  // };
 
   return (
     <>
@@ -107,14 +163,14 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
             </CountSelect>
           </CountContainer>
           <ButtonContainer>
-            <button onClick={handleCreate}>
+            <button type="button" onClick={handleCreateRoom}>
               <SmallButton text="만들기" />
             </button>
           </ButtonContainer>
         </ContentContainer>
-        <CancleButton onClick={handleCancle}>
+        <CancelButton onClick={handleCancel}>
           <Cancle />
-        </CancleButton>
+        </CancelButton>
       </CreateRoomContainer>
     </>
   );
@@ -236,7 +292,7 @@ const ButtonContainer = styled.div`
   justify-content: end;
 `;
 
-const CancleButton = styled.button`
+const CancelButton = styled.button`
   position: absolute;
   top: 20px;
   right: 20px;
