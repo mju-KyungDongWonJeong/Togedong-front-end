@@ -2,7 +2,12 @@ import styled, { ThemeProvider } from 'styled-components';
 import { theme } from './styles/Theme';
 import './App.css';
 import Login from './assets/pages/Login/Login';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom';
 import Signup from './assets/pages/Signup/Signup';
 import PushUpGameGuide from './assets/modal/PushUpGameGuide';
 import SquatGameGuide from './assets/modal/SquatGameGuide';
@@ -18,6 +23,7 @@ function App() {
       <Router>
         <Frame>
           <Routes>
+            <Route path="/" element={<Navigate to="/login" />} />
             <Route element={<MainHeader />}>
               <Route path="/dashboard/:userName" element={<Dashboard />} />
               <Route path="/gamelist" element={<GameList />} />

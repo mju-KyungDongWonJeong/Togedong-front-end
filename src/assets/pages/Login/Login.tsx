@@ -10,6 +10,7 @@ import { validation } from './Validation';
 import { Link, useNavigate } from 'react-router-dom';
 import { PostLogin } from '../../../api/\bauth/Login';
 import { LoginError, LoginResponse } from '../../type/PostLoginPayload';
+import { useEffect } from 'react';
 
 export interface LoginInputs {
   userId: string;
@@ -18,6 +19,15 @@ export interface LoginInputs {
 
 const Login = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    const userName = localStorage.getItem('userName');
+
+    if (accessToken && userName) {
+      navigate(`/dashboard/${userName}`);
+    }
+  }, []);
 
   const {
     register,
