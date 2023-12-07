@@ -11,6 +11,7 @@ import PushUpGameGuide from '../../modal/PushUpGameGuide';
 import GameResult from '../../modal/GameResult';
 import exitImage from '../../images/logout.svg';
 import axios from 'axios';
+import getWebSocket from '../../../api/GetWebSocket';
 
 await tf.ready();
 let detector = await poseDetection.createDetector(
@@ -20,9 +21,10 @@ let detector = await poseDetection.createDetector(
     modelType: 'full',
   },
 );
-const ws = new WebSocket(`ws://3.36.69.175:8000/count_squat`);
 
-const GameRoom = () => {
+const ws = getWebSocket(process.env.REACT_APP_ML_BASE_URL + 'count_squat');
+
+const SquatGameRoom = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -121,7 +123,7 @@ const GameRoom = () => {
   };
 
   return (
-    <All>
+    <AllContainer>
       {gameResultVisible ? (
         <GameResult roomManager={location.state.roomManager} count={count} />
       ) : (
@@ -141,36 +143,34 @@ const GameRoom = () => {
           )}
           <TimerBox>{gameTimer}</TimerBox>
           <CountBox>{count}</CountBox>
-          <WebcamBox>
-            <Webcam
-              audio={false}
-              ref={webcamRef}
-              style={{
-                textAlign: 'center',
-                position: 'absolute',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                width: '700px',
-                height: '600px',
-                top: 150,
-                left: 0,
-                right: 0,
-                zIndex: -100,
-                borderRadius: '10px',
-                border: '3px solid wheat',
-              }}
-            />
-          </WebcamBox>
+          <Webcam
+            audio={false}
+            ref={webcamRef}
+            style={{
+              textAlign: 'center',
+              position: 'absolute',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              width: '700px',
+              height: '600px',
+              top: 150,
+              left: 0,
+              right: 0,
+              zIndex: -100,
+              borderRadius: '10px',
+              border: '3px solid wheat',
+            }}
+          />
           <StartButton onClick={handleStartButtonClick}>측정하기</StartButton>
         </Container>
       )}
-    </All>
+    </AllContainer>
   );
 };
 
-export default GameRoom;
+export default SquatGameRoom;
 
-const All = styled.div`
+const AllContainer = styled.div`
   display: flex;
   width: 100%;
   height: 100vh;
@@ -256,5 +256,3 @@ const CountBox = styled.div`
   border-radius: 50%;
   color: ${({ theme }) => theme.colors.WHITE};
 `;
-
-const WebcamBox = styled.div``;

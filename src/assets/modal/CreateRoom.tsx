@@ -28,7 +28,11 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
 
   const handleCreate = async () => {
     const res = await createRoom();
-    navigate(`/gameroom/${res.data.exerciseName}`, { state: res.data });
+    if (res.data.exerciseName == 'PUSH_UP') {
+      navigate(`/pushupgameroom/${res.data.roomManager}`, { state: res.data });
+    } else {
+      navigate(`/squatgameroom/${res.data.roomManager}`, { state: res.data });
+    }
   };
 
   const handleCancel = () => {

@@ -8,12 +8,8 @@ interface MediumButtonInterface {
   text: string;
 }
 
-const handleClick = () => {
-  console.log('Click');
-};
-
 const MediumButton: React.FC<MediumButtonInterface> = ({ text }) => {
-  return <Button onClick={handleClick}>{text}</Button>;
+  return <Button>{text}</Button>;
 };
 
 export default MediumButton;
