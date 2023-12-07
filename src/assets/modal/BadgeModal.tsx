@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { ReactComponent as Cancle } from '../images/cancel.svg';
-import Pushup from '../images/pushupbadge.png';
-import Squat from '../images/squatbadge.png';
+import Pushup from '../images/PushUpBadge.png';
+import Squat from '../images/SquatBadge.png';
 import { Badge } from '../type/GetDashboardPayload';
 
 interface BadgeModalProps {
