@@ -14,7 +14,7 @@ const SecondPushUp = () => {
         </CrossShape>
       </CameraGuideContainer>
       <Text>반드시 전신이 카메라에 비치도록 해주세요.</Text>
-      <Text>타이머는 5초 뒤에 시작됩니다.</Text>
+      <Text>타이머는 1개를 실시하면 시작됩니다.</Text>
     </Container>
   );
 };

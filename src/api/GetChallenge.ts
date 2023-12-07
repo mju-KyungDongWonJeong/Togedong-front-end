@@ -27,7 +27,6 @@ export const GetChallenge = async ({
     });
 
     handleChallengeData(res.data.data);
-    console.log(res.data.data);
   } catch (error) {
     if (axios.isAxiosError<ChallengeError>(error) && error.response) {
       handleBoardError(error.response.data);

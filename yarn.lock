@@ -8396,6 +8396,11 @@ react-scripts@5.0.1:
   optionalDependencies:
     fsevents "^2.3.2"
 
+react-timer-hook@^3.0.7:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/react-timer-hook/-/react-timer-hook-3.0.7.tgz#ac42c43d0034b873cbf97b44eb34ccb2b11fe5e0"
+  integrity sha512-ATpNcU+PQRxxfNBPVqce2+REtjGAlwmfoNQfcEBMZFxPj0r3GYdKhyPHdStvqrejejEi0QvqaJZjy2lBlFvAsA==
+
 react-webcam@^7.2.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/react-webcam/-/react-webcam-7.2.0.tgz#64141c4c7bdd3e956620500187fa3fcc77e1fd49"

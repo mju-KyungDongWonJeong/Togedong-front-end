@@ -51,7 +51,7 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
     setCountPerson(e.target.value);
   };
 
-  const test_data = {
+  const room_data = {
     title: title, // 방제목
     memberLimit: Number(countPerson), // 사람 수
     exerciseName: selectExercise, // 운동 이름
@@ -62,7 +62,7 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
   const createRoom = async () => {
     const response = await axios.post(
       process.env.REACT_APP_BASE_URL + 'api/room',
-      test_data,
+      room_data,
       {
         headers: {
           'Content-Type': 'application/json',

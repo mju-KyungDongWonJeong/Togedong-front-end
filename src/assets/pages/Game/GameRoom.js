@@ -8,7 +8,9 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SquatGameGuide from '../../modal/SquatGameGuide';
 import PushUpGameGuide from '../../modal/PushUpGameGuide';
+import GameResult from '../../modal/GameResult';
 import exitImage from '../../images/logout.svg';
+import axios from 'axios';
 
 await tf.ready();
 let detector = await poseDetection.createDetector(
@@ -23,37 +25,14 @@ const ws = new WebSocket(`ws://3.36.69.175:8000/count_squat`);
 const GameRoom = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const type = 'testws';
-  // const type = location.pathname.includes('PUSH')
-  //   ? 'count_pushups'
-  //   : 'count_squat';
-  // const ws = new WebSocket(`ws://3.36.69.175:8000/${type}`);
 
   const [gameStart, setGameStart] = useState(false); // 게임 시작 여부
   const [count, setCount] = useState(0); // 운동 개수
   const [gameTimer, setGameTimer] = useState(60); // 타이머
+  const [gameResultVisible, setGameResultVisible] = useState(false); // 게임 결과
 
   const handleStartButtonClick = () => {
     setGameStart((prev) => !prev);
-  };
-
-  const GameTimer = () => {
-    useEffect(() => {
-      const intervalId = setInterval(() => {
-        setGameTimer((timer) => {
-          if (timer <= 1) {
-            clearInterval(intervalId);
-            return 0;
-          } else {
-            return timer - 1;
-          }
-        });
-      }, 1000);
-
-      return () => clearInterval(intervalId);
-    }, []);
-
-    return <h1>{gameTimer}</h1>;
   };
 
   const handleExit = () => {
@@ -65,26 +44,16 @@ const GameRoom = () => {
 
   const webcamRef = useRef(null);
 
-  // const detector = await poseDetection.createDetector(
-  // const detector =  poseDetection.createDetector(
-  //   poseDetection.SupportedModels.BlazePose,
-  //   {
-  //     runtime: 'tfjs',
-  //     modelType: 'full',
-  //   },
-  // );
-
   const runBlazePose = async () => {
     // blasepose모델 감지
 
     setInterval(() => {
       detect(detector);
-    }, 200);
+    }, 500); // 0.5초
   };
 
   useEffect(() => {
     const initializeTensorflow = async () => {
-      // await tf.ready();
       runBlazePose();
     };
 
@@ -108,68 +77,107 @@ const GameRoom = () => {
 
       if (
         gameStart &&
-        pose[0]?.keypoints3D.filter((item) => item.score < 0.27).length < 10 &&
-        gameTimer <= 59
+        pose[0]?.keypoints3D.filter((item) => item.score < 0.27).length < 10
       ) {
         // 포즈가 있고, 측정 시작을 눌렀을 때 시작
-        // ws.onopen = () => {
-        // alert('소켓 열림');
         ws.send(JSON.stringify(pose[0].keypoints3D));
-
-        // console.log(pose[0]);
-        // };
       }
-      // }, 5000);
     }
 
-    // setInterval(() => setCount((prev) => prev + 1), 3000);
     ws.onmessage = function (event) {
+      const paresdData = JSON.parse(event.data);
       // ml서버로부터 데이터 수신
-      setCount(event.data);
+      setCount(paresdData.count);
+      const timeData = Math.round(paresdData.time);
+      if (timeData > 60) {
+        ws.close();
+        setGameResultVisible(true);
+        postRecord();
+      } else {
+        setGameTimer(60 - Math.round(paresdData.time));
+      }
     };
   };
 
   window.requestAnimationFrame(runBlazePose);
 
+  const record_data = {
+    exerciseName: location.state.exerciseName,
+    record: count,
+  };
+
+  const postRecord = async () => {
+    const response = await axios.post(
+      process.env.REACT_APP_BASE_URL + 'api/record',
+      record_data,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      },
+    );
+    return response.data;
+  };
+
   return (
-    <Container>
-      <HeaderContainer>
-        <HeaderTitle>{location.state.roomTitle}</HeaderTitle>
-        <ExitRoom src={exitImage} alt="나가기 이미지" onClick={handleExit} />
-      </HeaderContainer>
-      {location.pathname.includes('PUSH') ? (
-        <PushUpGameGuide />
+    <All>
+      {gameResultVisible ? (
+        <GameResult roomManager={location.state.roomManager} count={count} />
       ) : (
-        <SquatGameGuide />
+        <Container>
+          <HeaderContainer>
+            <HeaderTitle>{location.state.roomTitle}</HeaderTitle>
+            <ExitRoom
+              src={exitImage}
+              alt="나가기 이미지"
+              onClick={handleExit}
+            />
+          </HeaderContainer>
+          {location.pathname.includes('PUSH') ? (
+            <PushUpGameGuide />
+          ) : (
+            <SquatGameGuide />
+          )}
+          <TimerBox>{gameTimer}</TimerBox>
+          <CountBox>{count}</CountBox>
+          <WebcamBox>
+            <Webcam
+              audio={false}
+              ref={webcamRef}
+              style={{
+                textAlign: 'center',
+                position: 'absolute',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '700px',
+                height: '600px',
+                top: 150,
+                left: 0,
+                right: 0,
+                zIndex: -100,
+                borderRadius: '10px',
+                border: '3px solid wheat',
+              }}
+            />
+          </WebcamBox>
+          <StartButton onClick={handleStartButtonClick}>측정하기</StartButton>
+        </Container>
       )}
-      <TimerBox>{gameStart ? <GameTimer /> : gameTimer}</TimerBox>
-      <CountBox>{count}</CountBox>
-      <WebcamBox>
-        <Webcam
-          audio={false}
-          ref={webcamRef}
-          style={{
-            textAlign: 'center',
-            position: 'absolute',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            width: '700px',
-            height: '600px',
-            top: 150,
-            left: 0,
-            right: 0,
-            zIndex: -100,
-            borderRadius: '10px',
-            border: '3px solid wheat',
-          }}
-        />
-      </WebcamBox>
-      <StartButton onClick={handleStartButtonClick}>측정하기</StartButton>
-    </Container>
+    </All>
   );
 };
 
 export default GameRoom;
+
+const All = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Container = styled.div`
   position: relative;
   display: flex;
@@ -179,12 +187,13 @@ const Container = styled.div`
 `;
 
 const HeaderContainer = styled.div`
+  position: sticky;
   width: 100%;
   height: 60px;
   display: flex;
   border-bottom: 1px solid ${({ theme }) => theme.colors.BLACK};
   line-height: 60px;
-  justify-content: center;
+  align-items: center;
   background-color: white;
 `;
 
