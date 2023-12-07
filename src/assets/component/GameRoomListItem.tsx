@@ -65,10 +65,3 @@ const ListBox = styled.div`
   color: ${({ theme }) => theme.colors.BLACK};
   font-size: 15px;
 `;
-
-const ParticipateText = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 94px;
-`;
