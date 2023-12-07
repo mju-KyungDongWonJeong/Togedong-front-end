@@ -34,7 +34,6 @@ export const PostChallenge = async ({
   } catch (error) {
     if (axios.isAxiosError<PostChallengeError>(error) && error.response) {
       handleBoardError(error.response.data);
-      console.log(error);
     }
   }
 };

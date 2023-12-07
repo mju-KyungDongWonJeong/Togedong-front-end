@@ -1,35 +1,30 @@
 import styled from 'styled-components';
 import cancel from '../images/cancel.svg';
 import RecordBox from '../component/RecordBox';
+import { useNavigate } from 'react-router-dom';
 
-const CONTENT_DATA = [
-  {
-    rank: 1,
-    name: '김정호',
-    count: 54,
-  },
-  {
-    rank: 2,
-    name: '최원유',
-    count: 45,
-  },
-  { rank: 3, name: '김동영', count: 41 },
-  {
-    rank: 4,
-    name: '경규혁',
-    count: 23,
-  },
-];
+interface GameResultProps {
+  roomManager: string; // RoomManagerType은 실제로 사용되는 타입으로 대체해야 합니다.
+  count: number;
+}
 
-const handleExit = () => {
-  console.log('exit');
-};
+const GameResult: React.FC<GameResultProps> = ({ roomManager, count }) => {
+  const CONTENT_DATA = [
+    {
+      rank: 1,
+      name: roomManager, // roomManager 값을 활용하여 변경
+      count: count, // count 값을 활용하여 변경
+    },
+  ];
+  const navigate = useNavigate();
 
-const GameResult = () => {
+  const handleExit = () => {
+    navigate('/gamelist');
+  };
   return (
     <Container>
       <TitleBox>
-        <Title>최종 순위</Title>
+        <Title>결과</Title>
         <XBox src={cancel} alt="x버튼" onClick={handleExit} />
       </TitleBox>
       <ContentBox>
@@ -57,6 +52,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.ORANGE1};
   border-radius: 10px;
   align-items: center;
+  z-index: 200;
 `;
 
 const TitleBox = styled.div`
@@ -78,7 +74,7 @@ const XBox = styled.img`
   width: 20px;
   height: 20px;
   margin-right: 30px;
-  margin-left: 100px;
+  margin-left: 140px;
   &:hover {
     cursor: pointer;
   }

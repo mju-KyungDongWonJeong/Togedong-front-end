@@ -5,11 +5,8 @@ import { ReactComponent as Cancle } from '../images/cancel.svg';
 import ExerciseImg from '../component/ExerciseImg';
 import SmallButton from '../component/SmallButton';
 import { useState } from 'react';
-
-type ExerciseState = {
-  PUSHUP: boolean;
-  SQUAT: boolean;
-};
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 interface CreateRoom {
   onClick(): void;
@@ -20,18 +17,28 @@ interface CreateRoomProps {
 }
 
 const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
-  const [selectExercise, setSelectExercise] = useState<ExerciseState>({
-    PUSHUP: true,
-    SQUAT: false,
-  });
+  const [selectExercise, setSelectExercise] = useState<'PUSH_UP' | 'SQUAT'>(
+    'PUSH_UP',
+  );
   const [passwordBox, setPasswordBox] = useState<boolean>(false);
   const [title, setTitle] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [countPerson, setCountPerson] = useState<string>('1');
-  const handleCreate = () => {};
-  const handleCancle = () => {
+  const navigate = useNavigate();
+
+  const handleCreate = async () => {
+    const res = await createRoom();
+    if (res.data.exerciseName == 'PUSH_UP') {
+      navigate(`/pushupgameroom/${res.data.roomManager}`, { state: res.data });
+    } else {
+      navigate(`/squatgameroom/${res.data.roomManager}`, { state: res.data });
+    }
+  };
+
+  const handleCancel = () => {
     setIsOpen(false);
   };
+
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
@@ -48,29 +55,47 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
     setCountPerson(e.target.value);
   };
 
+  const room_data = {
+    title: title, // 방제목
+    memberLimit: Number(countPerson), // 사람 수
+    exerciseName: selectExercise, // 운동 이름
+    hasPassword: passwordBox, // 비밀번호 여부
+    password: password, // 비밀번호
+  };
+
+  const createRoom = async () => {
+    const response = await axios.post(
+      process.env.REACT_APP_BASE_URL + 'api/room',
+      room_data,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      },
+    );
+    return response.data;
+  };
+
   return (
     <>
       <BackGround></BackGround>
       <CreateRoomContainer>
         <CreateRoomHeader>
-          <button
-            onClick={() => setSelectExercise({ PUSHUP: true, SQUAT: false })}
-          >
+          <button onClick={() => setSelectExercise('PUSH_UP')}>
             <ExerciseImg
               isModal={true}
               src={PushUp}
               title="푸쉬업"
-              check={selectExercise.PUSHUP}
+              check={selectExercise === 'PUSH_UP'}
             />
           </button>
-          <button
-            onClick={() => setSelectExercise({ PUSHUP: false, SQUAT: true })}
-          >
+          <button onClick={() => setSelectExercise('SQUAT')}>
             <ExerciseImg
               isModal={true}
               src={Squat}
               title="스쿼트"
-              check={selectExercise.SQUAT}
+              check={selectExercise === 'SQUAT'}
             />
           </button>
         </CreateRoomHeader>
@@ -98,21 +123,21 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
               <option key="1" value="1">
                 1
               </option>
-              <option key="2" value="2">
+              {/* <option key="2" value="2">
                 2
               </option>
               <option key="3" value="3">
                 3
-              </option>
+              </option> */}
             </CountSelect>
           </CountContainer>
           <ButtonContainer>
-            <button onClick={handleCreate}>
+            <button type="button" onClick={handleCreate}>
               <SmallButton text="만들기" />
             </button>
           </ButtonContainer>
         </ContentContainer>
-        <CancleButton onClick={handleCancle}>
+        <CancleButton onClick={handleCancel}>
           <Cancle />
         </CancleButton>
       </CreateRoomContainer>

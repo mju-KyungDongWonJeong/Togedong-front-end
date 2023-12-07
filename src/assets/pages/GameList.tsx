@@ -38,7 +38,6 @@ const GameList = () => {
 
   const handleGameRoomList = (data: GetRoomListPayload) => {
     setRoomList(data.data.rooms);
-    console.log(data);
   };
 
   const handleError = (error: GetRoomListError) => {

@@ -1,9 +1,12 @@
 import styled from 'styled-components';
+import poseSquat from '../images/Pose-squat.jpg';
 
 const FirstSquat = () => {
   return (
     <Container>
-      <CameraGuide></CameraGuide>
+      <CameraGuide>
+        <Pose src={poseSquat} alt="스쿼트" />
+      </CameraGuide>
       <Text>반드시 카메라가 정면을 바라보도록 해주세요.</Text>
     </Container>
   );
@@ -18,12 +21,17 @@ const Container = styled.div`
 `;
 
 const CameraGuide = styled.div`
-  width: 700px;
-  height: 350px;
-  border: 1px solid ${({ theme }) => theme.colors.BLACK};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Text = styled.p`
   margin-top: 20px;
   font-size: 20px;
+`;
+
+const Pose = styled.img`
+  width: 300px;
+  height: 400px;
 `;

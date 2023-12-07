@@ -7,7 +7,7 @@ interface SmallButtonInterface {
 
 const SmallButton = ({ text, onClick }: SmallButtonInterface) => {
   return (
-    <Button text={text} onClick={onClick}>
+    <Button text={text} onClick={onClick} type="button">
       {text}
     </Button>
   );
