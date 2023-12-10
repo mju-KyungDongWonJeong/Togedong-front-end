@@ -9,13 +9,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 interface SideBar {
   content: 'Dashboard' | 'Game' | 'Setting';
   src: string;
-  state: SideBarState;
+  state: string;
   path: string;
-}
-interface SideBarState {
-  Dashboard: boolean;
-  Game: boolean;
-  Setting: boolean;
 }
 
 const SideBar = () => {
@@ -28,19 +23,19 @@ const SideBar = () => {
       content: 'Dashboard',
       path: `/dashboard/${userName}`,
       src: DashBoard,
-      state: { Dashboard: true, Game: false, Setting: false },
+      state: '/dashboard',
     },
     {
       content: 'Game',
       path: '/gamelist',
       src: Game,
-      state: { Dashboard: false, Game: true, Setting: false },
+      state: '/gamelist',
     },
     {
       content: 'Setting',
       path: '/setting',
       src: Setting,
-      state: { Dashboard: false, Game: false, Setting: true },
+      state: '/setting',
     },
   ];
 
@@ -55,7 +50,7 @@ const SideBar = () => {
             <SideBarComponent
               content={item.content}
               src={item.src}
-              state={location.pathname.includes(item.path)}
+              state={location.pathname.includes(item.state)}
             />
           </button>
         ))}
