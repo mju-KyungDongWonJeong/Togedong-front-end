@@ -22,7 +22,7 @@ const BadgeModal = ({ badgeState, setBadgeBoard }: BadgeModalProps) => {
         </BadgeHeader>
         <BadgeContent>
           <PushupImg src={Pushup} state={badgeState.PUSH_UP_BADGE} />
-          <SquatImg src={Squat} state={badgeState.PUSH_UP_BADGE} />
+          <SquatImg src={Squat} state={badgeState.SQUAT_BADGE} />
         </BadgeContent>
       </BadgeContainer>
     </>

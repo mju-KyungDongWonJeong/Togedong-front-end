@@ -81,7 +81,7 @@ const Dashboard = () => {
                   title="보유 뱃지"
                   img={badge}
                   content={`${dashboardRes.badgeResponse.badgeCount}개`}
-                  desc={`${dashboardRes.badgeResponse.badgePercent}% 달성`}
+                  desc={'열심히 모아요!'}
                 />
               </button>
 
