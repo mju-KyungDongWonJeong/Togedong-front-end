@@ -12,7 +12,6 @@ import exitImage from '../../images/logout.svg';
 import axios from 'axios';
 import getWebSocket from '../../../api/GetWebSocket';
 
-await tf.ready();
 let detector = await poseDetection.createDetector(
   poseDetection.SupportedModels.BlazePose,
   {
@@ -55,6 +54,7 @@ const PushUpGameRoom = () => {
   useEffect(() => {
     const initializeTensorflow = async () => {
       runBlazePose();
+      await tf.ready();
     };
 
     initializeTensorflow();

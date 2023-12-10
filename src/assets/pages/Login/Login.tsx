@@ -44,7 +44,7 @@ const Login = () => {
   };
 
   const callbackFunction = (data: LoginResponse) => {
-    alert(data.message);
+    // alert(data.message);
     localStorage.setItem('accessToken', data.data.accessToken);
     localStorage.setItem('userName', data.data.userName);
     navigate(`/dashboard/${data.data.userName}`);

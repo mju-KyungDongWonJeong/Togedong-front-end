@@ -15,7 +15,7 @@ const MainHeader = () => {
 
   const handleLogout = () => {
     navigate('/login');
-    alert('로그아웃 하셨습니다!');
+    // alert('로그아웃 하셨습니다!');
     localStorage.removeItem('accessToken');
   };
 
