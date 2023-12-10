@@ -65,7 +65,7 @@ const CreateRoom = ({ setIsOpen }: CreateRoomProps) => {
 
   const createRoom = async () => {
     const response = await axios.post(
-      process.env.REACT_APP_BASE_URL + 'api/room',
+      process.env.REACT_APP_BASE_URL + '/api/room',
       room_data,
       {
         headers: {

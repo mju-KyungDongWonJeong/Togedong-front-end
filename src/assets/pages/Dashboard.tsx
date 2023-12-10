@@ -98,7 +98,7 @@ const Dashboard = () => {
 
             <ButtonContainer>
               <SmallButton
-                text="첼린지"
+                text="챌린지"
                 onClick={() => setContentView('challenge')}
               />
               <SmallButton
@@ -116,7 +116,7 @@ const Dashboard = () => {
             {contentView === 'challenge' && challengeData?.challenges && (
               <ChallengeList
                 userName={userName}
-                title="첼린지"
+                title="챌린지"
                 count="참여자 수"
                 status="달성현황"
                 listData={challengeData.challenges}

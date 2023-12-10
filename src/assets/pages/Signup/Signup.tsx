@@ -36,7 +36,7 @@ const Signup = () => {
   };
 
   const callbackFunction = (data: SignupResponse) => {
-    alert(data.message);
+    // alert(data.message);
     navigate('/login');
   };
 
