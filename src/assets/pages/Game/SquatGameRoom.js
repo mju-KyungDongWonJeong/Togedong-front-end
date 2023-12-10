@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SquatGameGuide from '../../modal/SquatGameGuide';
-import PushUpGameGuide from '../../modal/PushUpGameGuide';
 import GameResult from '../../modal/GameResult';
 import exitImage from '../../images/logout.svg';
 import axios from 'axios';
@@ -83,6 +82,7 @@ const SquatGameRoom = () => {
       ) {
         // 포즈가 있고, 측정 시작을 눌렀을 때 시작
         ws.send(JSON.stringify(pose[0].keypoints3D));
+        console.log('squat activate :: ', JSON.stringify(pose[0].keypoints3D));
       }
     }
 
@@ -110,7 +110,7 @@ const SquatGameRoom = () => {
 
   const postRecord = async () => {
     const response = await axios.post(
-      process.env.REACT_APP_BASE_URL + 'api/record',
+      process.env.REACT_APP_BASE_URL + '/api/record',
       record_data,
       {
         headers: {
@@ -136,11 +136,7 @@ const SquatGameRoom = () => {
               onClick={handleExit}
             />
           </HeaderContainer>
-          {location.pathname.includes('PUSH') ? (
-            <PushUpGameGuide />
-          ) : (
-            <SquatGameGuide />
-          )}
+          <SquatGameGuide />
           <TimerBox>{gameTimer}</TimerBox>
           <CountBox>{count}</CountBox>
           <Webcam

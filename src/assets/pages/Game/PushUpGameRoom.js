@@ -12,6 +12,7 @@ import exitImage from '../../images/logout.svg';
 import axios from 'axios';
 import getWebSocket from '../../../api/GetWebSocket';
 
+await tf.ready();
 let detector = await poseDetection.createDetector(
   poseDetection.SupportedModels.BlazePose,
   {
@@ -74,7 +75,6 @@ const PushUpGameRoom = () => {
       webcamRef.current.video.height = videoHeight;
 
       const pose = await net.estimatePoses(video); // 포즈 추출
-
       if (
         gameStart &&
         pose[0]?.keypoints3D.filter((item) => item.score < 0.27).length < 10
@@ -108,7 +108,7 @@ const PushUpGameRoom = () => {
 
   const postRecord = async () => {
     const response = await axios.post(
-      process.env.REACT_APP_BASE_URL + 'api/record',
+      process.env.REACT_APP_BASE_URL + '/api/record',
       record_data,
       {
         headers: {

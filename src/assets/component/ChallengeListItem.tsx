@@ -45,8 +45,8 @@ const ChallengeListItem = ({
         <ChallengeListTitle navbar={navbar}>
           {rowData.description}
         </ChallengeListTitle>
-        <ChallengeCount>{rowData.participantCount}</ChallengeCount>
-        <AchieveStatus>{rowData.progressPercent}</AchieveStatus>
+        <ChallengeCount>{rowData.participantCount}명</ChallengeCount>
+        <AchieveStatus>{rowData.progressPercent}%</AchieveStatus>
         {isMine && (
           <>
             {rowData.isParticipating === 'PARTICIPANT' ? (
