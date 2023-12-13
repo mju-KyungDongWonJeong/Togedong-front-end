@@ -3,7 +3,6 @@ import cancel from '../images/cancel.svg';
 import RecordBox from '../component/RecordBox';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useEffect } from 'react';
 
 interface GameResultProps {
   roomManager: string; // RoomManagerType은 실제로 사용되는 타입으로 대체해야 합니다.
