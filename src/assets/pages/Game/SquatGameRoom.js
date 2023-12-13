@@ -9,7 +9,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import SquatGameGuide from '../../modal/SquatGameGuide';
 import GameResult from '../../modal/GameResult';
 import exitImage from '../../images/logout.svg';
-import axios from 'axios';
 import getWebSocket from '../../../api/GetWebSocket';
 
 await tf.ready();
@@ -41,6 +40,7 @@ const SquatGameRoom = () => {
     detector.dispose();
     detector = null;
     navigate('/gamelist');
+    window.location.reload();
   };
 
   const webcamRef = useRef(null);
@@ -82,7 +82,6 @@ const SquatGameRoom = () => {
       ) {
         // 포즈가 있고, 측정 시작을 눌렀을 때 시작
         ws.send(JSON.stringify(pose[0].keypoints3D));
-        console.log('squat activate :: ', JSON.stringify(pose[0].keypoints3D));
       }
     }
 
@@ -94,7 +93,8 @@ const SquatGameRoom = () => {
       if (timeData > 60) {
         ws.close();
         setGameResultVisible(true);
-        postRecord();
+        console.log(count);
+        // postRecord();
       } else {
         setGameTimer(60 - Math.round(paresdData.time));
       }
@@ -102,25 +102,6 @@ const SquatGameRoom = () => {
   };
 
   window.requestAnimationFrame(runBlazePose);
-
-  const record_data = {
-    exerciseName: location.state.exerciseName,
-    record: count,
-  };
-
-  const postRecord = async () => {
-    const response = await axios.post(
-      process.env.REACT_APP_BASE_URL + '/api/record',
-      record_data,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      },
-    );
-    return response.data;
-  };
 
   return (
     <AllContainer>

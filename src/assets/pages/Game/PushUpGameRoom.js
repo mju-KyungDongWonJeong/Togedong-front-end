@@ -9,7 +9,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import PushUpGameGuide from '../../modal/PushUpGameGuide';
 import GameResult from '../../modal/GameResult';
 import exitImage from '../../images/logout.svg';
-import axios from 'axios';
 import getWebSocket from '../../../api/GetWebSocket';
 
 await tf.ready();
@@ -40,6 +39,7 @@ const PushUpGameRoom = () => {
     detector.dispose();
     detector = null;
     navigate('/gamelist');
+    window.location.reload();
   };
 
   const webcamRef = useRef(null);
@@ -92,7 +92,7 @@ const PushUpGameRoom = () => {
       if (timeData > 60) {
         ws.close();
         setGameResultVisible(true);
-        postRecord();
+        // postRecord();
       } else {
         setGameTimer(60 - Math.round(paresdData.time));
       }
@@ -101,24 +101,24 @@ const PushUpGameRoom = () => {
 
   window.requestAnimationFrame(runBlazePose);
 
-  const record_data = {
-    exerciseName: location.state.exerciseName,
-    record: count,
-  };
+  // const record_data = {
+  //   exerciseName: location.state.exerciseName,
+  //   record: count,
+  // };
 
-  const postRecord = async () => {
-    const response = await axios.post(
-      process.env.REACT_APP_BASE_URL + '/api/record',
-      record_data,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      },
-    );
-    return response.data;
-  };
+  // const postRecord = async () => {
+  //   const response = await axios.post(
+  //     process.env.REACT_APP_BASE_URL + '/api/record',
+  //     record_data,
+  //     {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+  //       },
+  //     },
+  //   );
+  //   return response.data;
+  // };
 
   return (
     <All>

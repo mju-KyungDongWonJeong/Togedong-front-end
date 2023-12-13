@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import cancel from '../images/cancel.svg';
 import RecordBox from '../component/RecordBox';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 interface GameResultProps {
   roomManager: string; // RoomManagerType은 실제로 사용되는 타입으로 대체해야 합니다.
@@ -17,9 +19,38 @@ const GameResult: React.FC<GameResultProps> = ({ roomManager, count }) => {
     },
   ];
   const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log(location);
+
+  const record_data = {
+    exerciseName: location.state.exerciseName,
+    record: count,
+  };
+
+  const postRecord = async () => {
+    const response = await axios.post(
+      process.env.REACT_APP_BASE_URL + '/api/record',
+      record_data,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      },
+    );
+    return response.data;
+  };
+
+  // useEffect(() => {
+  //   postRecord();
+  // }, []);
+
+  postRecord();
 
   const handleExit = () => {
     navigate('/gamelist');
+    window.location.reload();
   };
   return (
     <Container>
